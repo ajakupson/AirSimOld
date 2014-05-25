@@ -1,0 +1,24 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/contacts.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/contactsUpdates.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "friendsWrapper">
+        <nav class = "friendsTypes">
+            <ul>
+                <a href = "all_friends"><li>Friends</li></a>
+                <a href = "add_friend"><li>Add friend</li></a>
+                <a href = "contact_updates"><li class = "active">Updates</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "friendsContent">
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,98 @@
+label
+{
+    display: inline-block;
+    width: 110px;
+    margin-left: 15px;
+    text-align: left;
+}
+input[type = "text"], input[type = "password"]
+{
+    height: auto;
+    min-height: 30px;
+    width: 150px;
+    margin-top: 5px;
+    padding-left: 10px;
+    border: 1px solid #DDD;
+}
+input[type = "text"]:focus, input[type = "password"]:focus
+{
+    border: 1px solid #27a9ff;
+    outline: none;
+}
+input:focus::-webkit-input-placeholder { color: transparent; }
+input:focus:-moz-placeholder { color: transparent; }
+input:focus::-moz-placeholder { color: transparent; }
+input:focus:-ms-input-placeholder { color: transparent; }
+
+.submitButton
+{
+    width: auto;
+    min-width: 100px;
+    margin: 10px 0px 10px 10px;
+    padding: 10px;
+    background-color: #27a9ff;
+    font-family: Helvetica;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    border: 0px;
+    cursor: pointer;
+
+    transition: background-color .2s;
+}
+.submitButton:hover
+{
+    background-color: rgba(39, 169, 255, 0.51);
+}
+.submitButton:focus
+{
+    outline: none;
+}
+.formSelect
+{
+    padding: 3px;
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #888;
+    border: 0;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+
+    text-indent: 0.01px;
+    text-overflow: '';
+    min-width: 120px;
+    height: 20px;
+
+    font-size: 0.7em;
+    background: #ffffff;
+    background-image: url('./../images/styles/arrowSelect.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: contain;
+    padding-right: 20px;
+}
+.formSelect::-ms-expand
+{
+    display: none;
+}
+
+.ajaxWaitSmall
+{
+    width: 25px;
+    height: 25px;
+    background: url('./../images/styles/loader.gif') center no-repeat;
+    background-size: contain;
+    display: none;
+    float: right;
+    margin-right: 10px;
+}
+.confirmContent
+{
+    font-size: 0.9em;
+    text-align: center;
+}

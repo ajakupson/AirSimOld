@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AirSim\Bundle\SocialNetworkBundle\Entity\UserWallRecords" table="user_wall_records">
+    <id name="wallRecId" type="integer" column="wall_rec_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="toId" type="integer" column="to_id" nullable="false"/>
+    <field name="authorId" type="integer" column="author_id" nullable="false"/>
+    <field name="recordText" type="text" column="record_text" nullable="false"/>
+    <field name="dateAdded" type="datetime" column="date_added" nullable="false"/>
+  </entity>
+</doctrine-mapping>

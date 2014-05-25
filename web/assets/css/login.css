@@ -1,0 +1,236 @@
+/* ********** Adaptive Design ********** */
+@import 'adaptive/login_adaptive.css';
+/* ************************************* */
+
+.loginFormWrapper
+{
+    float: left;
+    width: 300px;
+    height: auto;
+    text-align: right;
+    padding: 5px 25px 10px 10px;
+    font-size: 0.8em;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.formLink
+{
+    margin: 10px 0px 5px 10px;
+}
+.rightPanel
+{
+    height: auto;
+    min-height: 300px;
+    margin-left: 335px;
+    padding: 0 0 0 20px;
+}
+.sliderDiv
+{
+
+    width: 900px;
+    height: 350px;
+    position: relative;
+
+    margin-bottom: 10px;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+.sliderDiv ul
+{
+    width: 9999px;
+    height: 350px;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+.sliderDiv ul li
+{
+    float: left;
+    position: relative;
+}
+.arrowLeft, .arrowRight
+{
+    width: 35px;
+    height: 59px;
+    position: absolute;
+    top: 145px;
+    z-index: 1;
+    cursor: pointer;
+    opacity: 0.4;
+
+    transition: opacity .2s;
+}
+.arrowLeft
+{
+    left: 0;
+    background: url('../images/styles/sliderArrowLeft.png') no-repeat center;
+    background-size: contain;
+    display: none;
+}
+.arrowRight
+{
+    right: 0;
+    background: url('../images/styles/sliderArrowRight.png') no-repeat center;
+    background-size: contain;
+}
+.arrowLeft:hover, .arrowRight:hover
+{
+    opacity: 1;
+}
+.slideImage
+{
+    width: 900px;
+    height: 350px;
+    border: 0;
+}
+.slideComment
+{
+
+    width: 750px;
+    height: auto;
+    min-height: 75px;
+    opacity: 0.7;
+    position: absolute;
+    left: 50%;
+    margin-left: -375px;
+    padding: 15px;
+    bottom: 30px;
+    color: white;
+    font-size: 0.9em;
+    background-color: #27a9ff;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    transition: opacity .5s;
+}
+.slideComment:hover
+{
+    opacity: 1;
+}
+.slideCommentNumbers
+{
+    float: left;
+    padding-right: 10px;
+    border-right: 1px solid lightgray;
+    height: 100%;
+}
+.boldSlideNumber
+{
+    font-size: 2em;
+    font-weight: bold;
+}
+.normalSlideNumber
+{
+    font-size: 1.5em;
+}
+.slideCommentText
+{
+    margin-left: 55px;
+}
+.description
+{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 250px;
+    height: 350px;
+    font-size: 0.8em;
+    padding: 0 10px 10px 10px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.questionMark
+{
+    width: 20px;
+    height: 37px;
+    position: absolute;
+    right: -5px;
+    top: -15px;
+    background: url('../images/styles/questionMark.png') no-repeat center;
+    background-size: contain;
+}
+.updatesDiv
+{
+    width: 100%;
+    height: auto;
+    float: left;
+    margin-top: 10px;
+    padding: 0 20px 20px 20px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.update
+{
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.8em;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+
+    transition: background-color .2s;
+}
+.update:hover
+{
+    background-color: rgba(244, 244, 244, 0.36);
+}
+.updateHeader
+{
+    float: left;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+    background-color: #27a9ff;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+.updateContent
+{
+    width: 100%;
+    float: left;
+    padding: 10px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+.updateImage
+{
+    margin: 5px 15px 10px 5px;
+    padding: 5px;
+    width: 100px;
+    height: 100px;
+    background: #ffffff;
+    border: 1px solid #f2f2f2;
+}

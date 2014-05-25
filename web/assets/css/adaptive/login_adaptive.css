@@ -1,0 +1,12 @@
+@media screen and (max-width:1919px)
+{
+    .sliderDiv
+    {
+        float: none;
+        margin: 0 auto;
+    }
+    .description
+    {
+        display: none;
+    }
+}

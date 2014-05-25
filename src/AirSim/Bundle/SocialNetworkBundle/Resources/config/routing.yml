@@ -1,0 +1,91 @@
+##### Index #####
+air_sim_social_network_index:
+    pattern:  /accounts/{action}
+    defaults: { _controller: AirSimSocialNetworkBundle:Accounts:accounts }
+# AJAX calls
+air_sim_social_network_index_login:
+    pattern:  /accounts_login
+    defaults: { _controller: AirSimSocialNetworkBundle:Accounts:userLogin }
+
+##### User #####
+air_sim_social_network_user:
+    pattern:  /user/{username}
+    defaults: { _controller: AirSimSocialNetworkBundle:User:user }
+# AJAX calls
+air_sim_social_network_user_photo_info:
+    pattern:  /user_get_photo_data
+    defaults: { _controller: AirSimSocialNetworkBundle:User:getPhotoData }
+air_sim_social_network_user_add_wall_record:
+    pattern:  /user_add_wall_record
+    defaults: { _controller: AirSimSocialNetworkBundle:User:addWallRecord }
+air_sim_social_network_user_like_wall_record:
+    pattern:  /user_like_wall_record
+    defaults: { _controller: AirSimSocialNetworkBundle:User:likeWallRecord }
+air_sim_social_network_user_dislike_wall_record:
+    pattern:  /user_dislike_wall_record
+    defaults: { _controller: AirSimSocialNetworkBundle:User:dislikeWallRecord }
+air_sim_social_network_user_delete_wall_record:
+    pattern:  /user_delete_wall_record
+    defaults: { _controller: AirSimSocialNetworkBundle:User:deleteWallRecord }
+
+##### Friends #####
+air_sim_social_network_contacts:
+    pattern:  /contacts/{action}
+    defaults: { _controller: AirSimSocialNetworkBundle:Contacts:contacts }
+# AJAX calls
+air_sim_social_network_contacts_search_friend:
+    pattern:  /contacts_search_friend
+    defaults: { _controller: AirSimSocialNetworkBundle:Contacts:searchFriend }
+air_sim_social_network_contacts_search_contact:
+    pattern:  /contacts_search_contact
+    defaults: { _controller: AirSimSocialNetworkBundle:Contacts:searchContactsByCriterias }
+
+##### Chat #####
+air_sim_social_network_chat:
+    pattern:  /chat/{location}
+    defaults: { _controller: AirSimSocialNetworkBundle:Chat:chat }
+
+##### Photos #####
+air_sim_social_network_photo_albums:
+    pattern:  /photo_albums/{username}
+    defaults: { _controller: AirSimSocialNetworkBundle:Albums:albums }
+# AJAX calls
+air_sim_social_network_photos:
+    pattern:  /photos/{albumId}
+    defaults: { _controller: AirSimSocialNetworkBundle:Photos:photos }
+# AJAX calls
+
+
+##### Options #####
+air_sim_social_network_options:
+    pattern:  /options/{type}
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:options }
+#AJAX calls
+air_sim_social_network_options_private_sync_config_change:
+    pattern:  /options_private_sync_config_change
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:configChange }
+air_sim_social_network_options_personal_update_main_info:
+    pattern:  /options_update_main_info
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:updateMainInfo }
+air_sim_social_network_options_personal_update_additional_info:
+    pattern:  /options_update_additional_info
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:updateAdditionalInfo }
+air_sim_social_network_options_personal_add_high_education:
+    pattern:  /options_add_high_education
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:addHighEducation }
+air_sim_social_network_options_personal_edit_high_education:
+    pattern:  /options_edit_high_education
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:editHighEducation }
+air_sim_social_network_options_personal_delete_high_education:
+    pattern:  /options_delete_high_education
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:deleteHighEducation }
+air_sim_social_network_options_personal_add_workplace:
+    pattern:  /options_add_workplace
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:addWorkplace }
+air_sim_social_network_options_personal_edit_workplace:
+    pattern:  /options_edit_workplace
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:editWorkplace }
+air_sim_social_network_options_personal_delete_workplace:
+    pattern:  /options_delete_workplace
+    defaults: { _controller: AirSimSocialNetworkBundle:Options:deleteWorkplace }
+

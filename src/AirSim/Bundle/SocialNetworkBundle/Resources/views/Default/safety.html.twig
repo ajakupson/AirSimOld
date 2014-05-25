@@ -1,0 +1,90 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/options.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/safety.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "optionsWrapper">
+        <nav class = "optionsTypes">
+            <ul>
+                <a href = "private"><li>Private</li></a>
+                <a href = "synchronization"><li>Synchronization</li></a>
+                <a href = "safety"><li class = "active">Safety</li></a>
+                <a href = "personal"><li>Personal data</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "optionsContent">
+            <section class = "optionsConfiguration">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><span class = "optionsHeader">Change phone number</span></td>
+                            <td>
+                                <div class = "ajaxWaitSmall"></div>
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td>New phone number:</td>
+                            <td><input type = "text" class = "right"/></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type = "button" class = "submitButton" value = "Send confirmation code"/></td>
+                        </tr>
+                        <tr>
+                            <td>Confirmation code:</td>
+                            <td><input type = "text" class = "right"/></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type = "button" class = "submitButton right" value = "Save"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class = "optionsConfiguration">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><span class = "optionsHeader">Change password</span></td>
+                            <td>
+                                <div class = "ajaxWaitSmall"></div>
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td>Old password:</td>
+                            <td><input type = "text"/></td>
+                        </tr>
+                        <tr>
+                            <td>New password:</td>
+                            <td><input type = "text"/></td>
+                        </tr>
+                        <tr>
+                            <td>Repeat new password:</td>
+                            <td><input type = "text"/></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type = "button" class = "submitButton right" value = "Save"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class = "optionDescription">
+                <article class = "generalDescription">
+                    Safety settings general description
+                </article>
+                <article class = "detailedDescription">
+                    Safety settings selected option detailed description
+                </article>
+            </section>
+        </div>
+    </div>
+{% endblock %}

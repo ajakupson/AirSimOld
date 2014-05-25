@@ -1,0 +1,96 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/albums.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+    <link href = "{{ asset('assets/css/gallery.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/albums.js') }}" type = "text/javascript"></script>
+    <script src ="{{ asset('assets/js/gallery.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "albumsWrapper">
+        <nav class = "albumTypes">
+            <ul>
+                <a href = "?type=albums"><li>My albums</li></a>
+                <a href = "?type=profile"><li>Profile pictures</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <section class = "albumsContainer">
+            <input type = "button" class = "submitButton right" value = "Create album"/>
+            <div class = "clear"></div>
+            {% for record in albumsAndPhotos %}
+                <div class = "album">
+                    <div class = "albumTitle">{{ record.album.albumTitle }}</div>
+                    <input type = "hidden" class = "albumId" value = "{{ record.album.albumId }}"/>
+                    <ul>
+                        {% for photo in record.photos %}
+                            <li>
+                                <img src = "./../../../../../AirSim/web/public_files/{{ app.session.get('userSessionData')['userInfo']['username'] }}/albums/{{ record.album.albumName }}/{{ photo.photoName }}"
+                                     class = "photo"/>
+                                <input type = "hidden" class = "photoId" value = "{{ photo.photoId }}" />
+                            </li>
+                        {% endfor %}
+                    </ul><div class = "clear"></div>
+                    <input type = "button" class = "submitButton right" value = "Delete album"/>
+                    <input type = "button" class = "submitButton right" value = "Upload photos"/>
+                    <div class = "clear"></div>
+                </div>
+            {% endfor %}
+        </section>
+     </div>
+
+    <!-- ********** PopUp Windows ********** -->
+
+    <!-- Photo PopUp Window -->
+    <div id = "photoPopUp" class = "popUpWindow popUpGallery">
+        <div class = "popUpWindowTitle">Photo</div>
+        <div id = "popUpClose" class = "popUpClose">x</div>
+                <span id = "popUpCloseTooltip" class = "popUpCloseTooltip">
+                    Press esc to exit
+                    <span id = "popUpArrow" class = "popUpArrow"></span>
+                </span>
+        <div class = "popUpContent">
+            <div class = "photoContainer">
+                <img class = "photoShow"/>
+                <div class = "previousPhoto">
+                    <input type = "hidden" id = "previousPhotoId" value = "" />
+                </div>
+                <div class = "nextPhoto">
+                    <input type = "hidden" id = "nextPhotoId" value = "" />
+                </div>
+                <div class = "photoDescription"></div>
+                <div class = "descriptionButton">Show description</div>
+            </div>
+            <div class = "photoInfoWrapper">
+                <span class = "photoBlockTitle">Photo Info:</span><br/><br/>
+                <div class = "photoInfo">
+                    <div class = "photoInfoLine albumName">Album:<span class = "infoSpan spanAlbum"></span></div>
+                    <div class = "photoInfoLine photoDateAdded">Date added:<span class = "infoSpan spanDate"></span></div><div class = "clear"></div>
+                    <div class = "photoInfoLine photoName">Title:<span class = "infoSpan spanPhoto"></span></div>
+                    <div class = "photoInfoLine photoLocation">Location:<span class = "infoSpan spanLocation"></span></div>
+                </div>
+                <div class = "photoRating">
+                    <div class = "photoRatingNumbers">
+                        <span class = "photoRatingOut">8/</span>
+                        <span class = "photoRatingOf">10</span>
+                    </div>
+                    <div class = "photoRatingStars"></div>
+                </div>
+            </div><div class = "clear"></div>
+            <div class = "insertComment">
+                <span class = "photoBlockTitle">Your Comment:</span><br/><br/>
+                <textarea class = "photoCommentTextarea" placeholder = "Thoughts?"></textarea>
+                <input type = "button" class = "submitButton right" value = "Comment photo"/>
+            </div><div class = "clear"></div>
+            <div class = "photoCommentsWrapper">
+                <span class = "photoBlockTitle">Comments:</span><br/><br/>
+            </div>
+        </div>
+    </div>
+    <!-- End Of Photo PopUp Window -->
+
+    <!-- ********** End Of PopUp Windows ********** -->
+{% endblock %}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+    <head>
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        {% block globalStylesheets %}
+            <link href = "{{ asset('assets/css/styles.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+            <link href = "https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css" rel = "stylesheet" />
+        {% endblock %}
+        {% block pageStylesheets %}
+        {% endblock pageStylesheets %}
+
+        {% block globalJavaScripts %}
+            <script src ="{{ asset('assets/plugins/jQuery-1.11.0.js') }}" type = "text/javascript"></script>
+            <script src ="{{ asset('assets/js/popUpWindow.js') }}" type = "text/javascript"></script>
+            <script src ="{{ asset('assets/js/global.js') }}" type = "text/javascript"></script>
+            <script src = "https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js"></script>
+            <script src ="{{ asset('assets/js/layoutInner.js') }}" type = "text/javascript"></script>
+            <script src ="{{ asset('assets/js/tooltip.js') }}" type = "text/javascript"></script>
+        {% endblock %}
+        {% block pageJavaScripts %}
+        {% endblock pageJavaScripts %}
+    </head>
+    <body>
+        <div class = "wrapper_inner">
+            <header class = "header_inner">
+            </header>
+            <section class = "content">
+                <nav class = "mainMenu">
+                    <ul>
+                        <a href = "./../user/{{ app.session.get('userSessionData')['userInfo']['username'] }}">
+                            <li>
+                                <span class = "menuIcon home"></span>
+                                <span class = "menuText">Home page</span>
+                            </li>
+                        </a>
+                        <a href = "./../contacts/all_friends">
+                            <li>
+                                <span class = "menuIcon friends"></span>
+                                <span class = "menuText">Friends</span>
+                            </li>
+                        </a>
+                        <a href = "./../chat/available_chats">
+                            <li>
+                                <span class = "menuIcon messages"></span>
+                                <span class = "menuText">Messages</span>
+                            </li>
+                        </a>
+                        <a href = "./../photo_albums/{{ app.session.get('userSessionData')['userInfo']['username'] }}">
+                            <li>
+                                <span class = "menuIcon photos"></span>
+                                <span class = "menuText">Photos</span>
+                            </li>
+                        </a>
+                        <a href = "" id = "map">
+                            <li>
+                                <span class = "menuIcon map"></span>
+                                <span class = "menuText">Map</span>
+                            </li>
+                        </a>
+                        <a href = "">
+                            <li>
+                                <span class = "menuIcon news"></span>
+                                <span class = "menuText">News</span>
+                            </li>
+                        </a>
+                        <a href = "./../options/private">
+                            <li>
+                                <span class = "menuIcon options"></span>
+                                <span class = "menuText">Options</span>
+                            </li>
+                        </a>
+                        <a href = "">
+                            <li>
+                                <span class = "menuIcon advanced"></span>
+                                <span class = "menuText">Advanced</span>
+                            </li>
+                        </a>
+                        <a href = "">
+                            <li>
+                                <span class = "menuIcon safe"></span>
+                                <span class = "menuText">Safe</span>
+                            </li>
+                        </a>
+                        <a href = "">
+                            <li>
+                                <span class = "menuIcon favorites"></span>
+                                <span class = "menuText">Favorites</span>
+                            </li>
+                        </a>
+                    </ul>
+                </nav>
+                {% block uniqueContent %}
+                {% endblock %}
+                <div class = "notifiationBox">
+                    <audio controls id = "notificationSound">
+                        <source src = "{{ asset('assets/sounds/beep-24.mp3') }}">
+                    </audio>
+                    <div class = "notificationHeader">
+                        <span class = "notificationIcon"></span>
+                        <span class = "notificationHeaderText">Notification System!</span>
+                    </div>
+                    <div class = "notificationContent">
+                        <div class = "notificationAuthor">
+                            <img src = ""/>
+                            <div class = "notificationText">
+                                Some notification text
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ********** PopUp Windows ********** -->
+
+                <!-- Map PopUp Window -->
+                <div id = "mapPopUp" class = "popUpWindow">
+                    <div class = "popUpWindowTitle">Map</div>
+                    <div id = "popUpClose" class = "popUpClose">x</div>
+                <span id = "popUpCloseTooltip" class = "popUpCloseTooltip">
+                    Press esc to exit
+                    <span id = "popUpArrow" class = "popUpArrow"></span>
+                </span>
+                    <div class = "popUpContent">
+                        <div class = "mapLeftPanel">
+                            <div class = "addMarker">
+                                <form id = "addMarkerForm">
+                                    <label for = "location">Your location: <span class = "required">*</span></label>
+                                    <input type = "text" name = "location" placeholder = "Enter country, city or address"/><br/>
+
+                                    <label for = "comment">Comment: </label>
+                                    <input type = "text" name = "comment" placeholder = "Your thoughts?"/><br/>
+
+                                    <input type = "button" class = "submitButton" value = "Mark Your location" />
+                                </form>
+                            </div>
+                            <div class = "mapBox" id = "mapBox"></div>
+                        </div>
+                        <div class = "mapRightPanel">
+                            <div class = "mapChat">
+                                <div class = "userMapStatus">
+                                    <div class = "userMapPic">
+
+                                    </div>
+                                    <div class = "userMapStatusBlock">
+                                        <div class = "userMapStatusText"></div>
+                                        <div class = "userMapStatusUpdated"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "mapFriendsList"></div>
+                        </div>
+                        <div class = "clear"></div>
+                    </div>
+                </div>
+                <!-- Map PopUp Window -->
+
+                <!-- Confirm Dialog Window -->
+                <div id = "dialogPopUp" class = "popUpWindow">
+                    <div class = "popUpWindowTitle">Confirm</div>
+                    <div id = "popUpClose" class = "popUpClose">x</div>
+                    <span id = "popUpCloseTooltip" class = "popUpCloseTooltip">
+                        Press esc to exit
+                        <span id = "popUpArrow" class = "popUpArrow"></span>
+                    </span>
+                    <div class = "popUpContent">
+                        <input type = "hidden" id = "dialogOperation" value = ""/>
+                        <div class = "confirmContent">
+                            Are You sure?
+                            <input type = "button" class = "submitButton" id = "confirmYes" value = "Yes"/>
+                            <input type = "button" class = "submitButton" id = "confirmNo" value = "No"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Confirm Dialog -->
+
+                <div class = "popUpWindowBackground"></div>
+
+                <!-- ********** End Of PopUp Windows ********** -->
+
+                <div class = "clear"></div>
+            </section>
+            <div class = "push_inner"></div>
+        </div>
+        <footer class = "footer_inner">
+        </footer>
+    </body>
+</html>

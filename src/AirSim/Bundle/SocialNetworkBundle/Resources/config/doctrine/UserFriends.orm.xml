@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AirSim\Bundle\SocialNetworkBundle\Entity\UserFriends" table="user_friends">
+    <id name="recId" type="integer" column="rec_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="userId" type="integer" column="user_id" nullable="false"/>
+    <field name="friendId" type="integer" column="friend_id" nullable="false"/>
+    <field name="dateAdded" type="date" column="date_added" nullable="false"/>
+    <field name="isAccepted" type="boolean" column="is_accepted" nullable="false"/>
+    <field name="dateAccepted" type="date" column="date_accepted" nullable="true"/>
+    <field name="groupId" type="integer" column="group_id" nullable="false"/>
+  </entity>
+</doctrine-mapping>

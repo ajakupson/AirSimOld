@@ -1,0 +1,215 @@
+.photoContainer
+{
+    width: 100%;
+    height: auto;
+    position: relative;
+    text-align: center;
+}
+.photoShow
+{
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
+.previousPhoto, .nextPhoto
+{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    cursor: pointer;
+
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+.previousPhoto
+{
+    top: 45%;
+    left: 0;
+    background: url('./../images/styles/previousButton.png') no-repeat center;
+    background-size: cover;
+}
+.nextPhoto
+{
+    top: 45%;
+    right: 0;
+    background: url('./../images/styles/nextButton.png') no-repeat center;
+    background-size: cover;
+}
+.previousPhoto:hover, .nextPhoto:hover
+{
+    opacity: 1;
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+}
+
+.photoInfoWrapper
+{
+    width: 100%;
+    height: auto;
+    position: relative;
+    margin: 10px 0 0 0;
+}
+.photoInfo
+{
+    float: left;
+    width: 40%;
+    height: auto;
+    margin: 0 0 15px 0;
+}
+.photoRating
+{
+    float: left;
+    width: 60%;
+    height: auto;
+}
+.photoBlockTitle
+{
+    width: auto;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: lightgrey;
+    padding: 5px 0 5px 0;
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid lightgrey;
+}
+.photoInfoLine
+{
+    width: auto;
+    min-width: 20%;
+    height: 24px;
+    line-height: 24px;
+    float: left;
+    padding-left: 40px;
+    margin: 0 0 10px 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.albumName
+{
+    background: url('./../images/styles/albumIcon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+.photoName
+{
+    background: url('./../images/styles/photoIcon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+.descriptionButton
+{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    height: auto;
+    background-color: #27a9ff;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 0.9em;
+    cursor: default;
+
+}
+.photoDescription
+{
+    width: auto;
+    max-width: 75%;
+    height: auto;
+    opacity: 0.7;
+    position: absolute;
+    right: 45px;
+    bottom: 65px;
+    color: white;
+    font-size: 1em;
+    background-color: #27a9ff;
+    padding: 15px;
+    display: none;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+}
+.photoDateAdded
+{
+    background: url('./../images/styles/calendarIcon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+.photoLocation
+{
+    background: url('./../images/styles/markerIcon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+.infoSpan
+{
+    float: right;
+    margin: 0 0 0 10px;
+    font-weight: normal;
+    color: gray;
+}
+.photoRatingStars
+{
+    width: auto;
+    height: auto;
+    float: right;
+    margin: 7px 8px 0 0;
+}
+.photoRatingNumbers
+{
+    width: auto;
+    height: auto;
+    float: right;
+    margin: 0 8px 0 0;
+}
+.photoRatingOut
+{
+    font-size: 2em;
+    font-weight: bold;
+}
+.photoRatingOf
+{
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+
+.insertComment
+{
+    font-size: 0.9em;
+}
+.photoCommentTextarea
+{
+    width: 100%;
+    min-height: 15px;
+    resize: none;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #ededed;
+    font-family: Helvetica;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+.photoCommentTextarea:focus
+{
+    border: 1px solid #27a9ff;
+    outline: none;
+    background-color: #fdfdfd;
+}
+.photoCommentTextarea:focus::-webkit-input-placeholder { color: transparent; }
+.photoCommentTextarea:focus:-moz-placeholder { color: transparent; }
+.photoCommentTextarea:focus::-moz-placeholder { color: transparent; }
+.photoCommentTextarea:focus:-ms-input-placeholder { color: transparent; }

@@ -1,0 +1,56 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/options.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/synchronization.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "optionsWrapper">
+        <nav class = "optionsTypes">
+            <ul>
+                <a href = "private"><li>Private</li></a>
+                <a href = "synchronization"><li class = "active">Synchronization</li></a>
+                <a href = "safety"><li>Safety</li></a>
+                <a href = "personal"><li>Personal data</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "optionsContent">
+            <section class = "optionsConfiguration">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td><span class = "optionsHeader">Synchronization Settings</span><br/><br/></td>
+                        <td>
+                            <div class = "ajaxWaitSmall"></div>
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr>
+                        <td>Automatic synchronization between phone and website:</td>
+                        <td>
+                            <select class = "configOptionSelect" name = "sync_auto_sync">
+                                <option value = "0" {% if config.syncAutoSync == 0%}selected{% endif %}>phone number</option>
+                                <option value = "1" {% if config.syncAutoSync == 1%}selected{% endif %}>phone number + N.F.</option>
+                                <option value = "2" {% if config.syncAutoSync == 2%}selected{% endif %}>phone number + additional information</option>
+                                <option value = "3" {% if config.syncAutoSync == 3%}selected{% endif %}>phone number + N.F> + add.info</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class = "optionDescription">
+                <article class = "generalDescription">
+                    Synchronization settings general description
+                </article>
+                <article class = "detailedDescription">
+                    Synchronization settings selected option detailed description
+                </article>
+            </section>
+        </div>
+    </div>
+{% endblock %}

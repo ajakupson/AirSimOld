@@ -1,0 +1,86 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/contacts.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/addFriend.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "friendsWrapper">
+        <nav class = "friendsTypes">
+            <ul>
+                <a href = "all_friends"><li>Friends</li></a>
+                <a href = "add_friend"><li class = "active">Add friend</li></a>
+                <a href = "contact_updates"><li>Updates</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "friendsContent">
+            <div class = "alignMiddle">
+                <div class = "usersList">
+                    <div class = "right">
+                        <input type = "text" id = "searchContactText" placeholder = "Name, family"/><input type = "button" class = "submitButton" id = "searchContactButton" value = "Search"/>
+                    </div><div class = "clear"></div>
+                    <div class = "usersBlocksWrap">
+                    </div>
+                    <div class = "middle" style = "width: 25px;">
+                        <div class = "ajaxWaitSmall" id = "waitContactsToLoad"></div>
+                        <div class = "clear"></div>
+                    </div>
+                </div>
+                <div class = "searchCriterias">
+                    <div class = "category">Gender:</div><br/>
+                    <label for = "male">Male</label>
+                    <input type = "radio" name = "gender" id = "male" value = "M"/><br/>
+                    <label for = "female">Female</label>
+                    <input type = "radio" name = "gender" id = "female" value = "F"/><br/>
+                    <label for = "undefined">Undefined</label>
+                    <input type = "radio" name = "gender" id = "undefined" value = "U"/><br/>
+                    <label for = "any">Any</label>
+                    <input type = "radio" name = "gender" id = "any" value = "A" checked/><br/><br/>
+                    <div class = "category">Contact data:</div><br/>
+                    <label for = "phoneNumber">Phone number:</label>
+                    <input type = "text" name = "phoneNumber" id = "phoneNumber"/><br/>
+                    <label for = "country">Country:</label>
+                    <select name = "country" id = "country" class = "formSelect">
+                        <option value = "0"></option>
+                        <option value = "Estonia">Estonia</option>
+                    </select><br/>
+                    <label for = "city">City:</label>
+                    <select name = "city" id = "city" class = "formSelect">
+                        <option value = "0"></option>
+                        <option value = "Tallinn">Tallinn</option>
+                    </select><br/><br/>
+                    <div class = "category">Age:</div><br/>
+                    <div class = "right">
+                        <label for = "ageFrom" class = "ageLabel">From</label>
+                        <input type = "text" class = "ageInput" name = "ageFrom" id = "ageFrom"/>
+                        <label for = "ageTo" class = "ageLabel">To</label>
+                        <input type = "text" class = "ageInput" name = "ageTo" id = "ageTo"/>
+                    </div>
+                </div>
+            </div><div class = "clear"></div>
+        </div>
+    </div>
+
+    <!-- ********** Add Friend PopUp Windows ********** -->
+
+    <!-- Write Message PopUp Window -->
+    <div id = "writeMessagePopUp" class = "popUpWindow">
+        <div class = "popUpWindowTitle">Write message</div>
+        <div id = "popUpClose" class = "popUpClose">x</div>
+                <span id = "popUpCloseTooltip" class = "popUpCloseTooltip">
+                    Press esc to exit
+                    <span id = "popUpArrow" class = "popUpArrow"></span>
+                </span>
+        <div class = "popUpContent">
+            inner content
+            <div class = "clear"></div>
+        </div>
+    </div>
+    <!-- End Of Write Message PopUp Window -->
+
+    <!-- ********** End Of Add Friend PopUp Windows ********** -->
+{% endblock %}

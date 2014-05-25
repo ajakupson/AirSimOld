@@ -1,0 +1,32 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/chat.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/availableChats.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "availableChatsWrapper">
+        <div class = "availableChatsContent">
+            Select or create chat room
+            <section class = "availableChats">
+                <ul>
+                    {% for chat in availableChats %}
+                        <a href = "chat_room?id={{ chat.chatId }}">
+                            <li>
+                                <img src = "{{ asset('public_files/'~chat['messageAuthorUsername'])~'/albums/profile_pics/'
+                                ~chat['messageAuthorWebProfilePic'] }}" class = "authorPic"/>
+                                <span class = "author">{{ chat.messageAuthorName }} {{ chat.messageAuthorFamily }}</span><br/>
+                                <span class = "dateTime">{{ chat.messageSentTime }}</span><br/>
+                                <span class = "message">{{ chat.chatMessage }}</span>
+                            </li>
+                         </a>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+     </div>
+{% endblock %}

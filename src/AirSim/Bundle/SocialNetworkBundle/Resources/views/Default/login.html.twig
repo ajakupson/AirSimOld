@@ -1,0 +1,81 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutOuter.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/login.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/login.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <aside class = "loginFormWrapper">
+        <h1>{{ translations['login_form_title'] }}</h1>
+        <form id = "loginForm">
+            <label for = "username">{{ translations['login_username'] }}: <span class = "required">*</span></label>
+            <input type = "text" name = "username" placeholder = "{{ translations['login_user_placeholder'] }}"/><br/>
+
+            <label for = "password">{{ translations['login_password'] }}: <span class = "required">*</span></label>
+            <input type = "password" name = "password" placeholder = "**********"/><br/>
+
+            <div class = "formLink">
+                <a href = "./restore">{{ translations['login_forgot'] }}</a>
+            </div>
+
+            <a href = "./register">
+                <input type = "button" class = "submitButton" style = "margin-right: 10px;" value = "{{ translations['login_register'] }}" />
+            </a>
+            {{ translations['login_or'] }}
+            <input type = "button" class = "submitButton loginButton" value = "{{ translations['login_signin'] }}" />
+        </form>
+        <div class = "errors">
+            <div id = "usernameIsRequired" class = "hidden">Username is required!</div>
+            <div id = "passwordIsRequired" class = "hidden">Password is required!</div>
+            <div id = "wrongUsernameOrPass" class = "hidden">Wrong username or password!</div>
+        </div>
+    </aside>
+    <section class = "rightPanel">
+        <div class = "sliderDiv">
+            <div class = "arrowLeft"></div>
+            <div class = "arrowRight"></div>
+            <ul id = "slider">
+                {% for i in 1..5 %}
+                    <li>
+                        <img src = "{{ asset('assets/images/slides/slide'~i~'.jpg') }}" class = "slideImage"/>
+                        <div class = "slideComment">
+                            <div class = "slideCommentNumbers">
+                                <span class = "boldSlideNumber">{{ i }}</span><span class = "normalSlideNumber">/5</span>
+                            </div>
+                            <article class = "slideCommentText">
+                                {{ translations['login_slide'~i ] }}
+                            </article>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <aside class = "description">
+            <div class = "questionMark"></div>
+            <h1>{{ translations['login_about_title'] }}</h1>
+            {{ translations['login_about'] }}
+        </aside>
+        <section class = "updatesDiv">
+            <h1>{{ translations['login_updates'] }}</h1>
+            {% for n in news %}
+                <article class = "update">
+                    <div class = "updateHeader">
+                        <div class = "left">{{ n.title}}</div>
+                        <div class = "right">{{ n.dateAdded | date('d.m.Y') }}</div>
+                    </div>
+                    <div class = "updateContent">
+                        {% if n.pic %}<img src = "{{ asset('assets/images/news/'~n.pic) }}" class = "updateImage" align = "left">{% endif %}
+                        {{ n.description }}
+                    </div>
+                    <input type = "button" class = "submitButton right" style = "margin-right: 10px;" value = "{{ translations['login_read_more'] }}" />
+                    <input type = "hidden" class = "newsId" value = "{{ n.newsId }}"/>
+                    <div class = "clear"></div>
+                </article>
+            {% endfor %}
+        </section>
+    </section>
+{% endblock uniqueContent %}

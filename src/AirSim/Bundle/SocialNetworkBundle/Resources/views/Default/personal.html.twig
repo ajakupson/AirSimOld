@@ -1,0 +1,192 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/options.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+    <link href = "{{ asset('assets/plugins/jquery-ui-1.10.4.custom/css/airsim-theme/jquery-ui-1.10.4.custom.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/plugins/jQuery-form.js') }}" type = "text/javascript"></script>
+    <script src ="{{ asset('assets/plugins/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js') }}" type = "text/javascript"></script>
+    <script src ="{{ asset('assets/plugins/jquery.validate.js') }}" type = "text/javascript"></script>
+    <script src ="{{ asset('assets/js/personal.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "optionsWrapper">
+        <nav class = "optionsTypes">
+            <ul>
+                <a href = "private"><li>Private</li></a>
+                <a href = "synchronization"><li>Synchronization</li></a>
+                <a href = "safety"><li>Safety</li></a>
+                <a href = "personal"><li class = "active">Personal data</li></a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "optionsContent">
+            <div class = "personalFormsWrapper">
+                <section class = "optionsConfiguration mainOrAdditionalInfo">
+                    <span class = "optionsHeader">Main information</span>
+                    <span class = "ajaxWaitSmall right"></span><br/><br/>
+                    <div class = "success right hidden">Successfully updated!</div><br/>
+                    <form class = "personalDataForm">
+                        <label for = "userName">Name:<span class = "required">*</span></label>
+                        <input type = "text" name = "userName" value = "{{ userData[0].firstName }}"/><br/>
+                        <label for = "userFamily">Family:<span class = "required">*</span></label>
+                        <input type = "text" name = "userFamily" value = "{{ userData[0].lastName }}"/><br/>
+                        <label for = "userBirthdate">Birthdate:</label>
+                        <input type = "text" name = "userBirthdate" class = "inputDate" value = "{{ userData[0].birthdate | date('Y.m.d') }}"/><br/>
+                        <label for = "userGender">Gender:</label>
+                        <select name = "userGender">
+                            <option value = "M" {% if userData[0].gender == "M" %}selected{% endif %}>Male</option>
+                            <option value = "F" {% if userData[0].gender == "F" %}selected{% endif %}>Female</option>
+                            <option value = "U" {% if userData[0].gender == "U" %}selected{% endif %}>Undefined</option>
+                        </select><br/>
+                        <label for = "phoneOperator">Phone operator:<span class = "required">*</span></label>
+                        <input type = "text" name = "phoneOperator" value = "{{ userData[0].operator }}"/><br/>
+                        <input type = "button" class = "submitButton right" id = "updateMainInfo" value = "Save"/><br/>
+                        <div class = "errors right hidden">Please fill all required fields!</div><br/>
+                    </form>
+                </section>
+                <section class = "optionsConfiguration mainOrAdditionalInfo">
+                    <span class = "optionsHeader">Additional information</span>
+                    <span class = "ajaxWaitSmall right"></span><br/><br/>
+                    <div class = "success right hidden">Successfully updated!</div><br/>
+                    <form class = "personalDataForm">
+                        <label for = "email">E-mail:</label>
+                        <input type = "text" name = "email" value = "{{ userData[0].email }}"/><br/>
+                        <label for = "country">Country:</label>
+                        <input type = "text" name = "country" value = "{{ userData[0].country }}"/><br/>
+                        <label for = "city">City:</label>
+                        <input type = "text" name = "city" value = "{{ userData[0].city }}"/><br/>
+                        <label for = "address">Address:</label>
+                        <input type = "text" name = "address" value = "{{ userData[0].address }}"/><br/>
+                        <label for = "website">Website:</label>
+                        <input type = "text" name = "website" value = "{{ userData[0].website }}"/><br/>
+                        <input type = "button" class = "submitButton right" id = "updateAdditionalInfo" value = "Save"/>
+                    </form>
+                </section>
+                <section class = "optionsConfiguration">
+                    <span class = "optionsHeader">Education</span>
+                    <span class = "ajaxWaitSmall right"></span><br/><br/>
+                    <div class = "optionsAddPlace">
+                        Add high education:
+                        <span class = "plusIcon right addHighEducation"></span>
+                    </div>
+                    <div id = "highEducationWrapper">
+                        {% for degree in userHighEducation %}
+                            <div class = "highEducation">
+                                <form name = "highEducationForm">
+                                    <div class = "optionsSubHeader">Degree:</div>
+                                    <input type = "hidden" class = "highEducationRecordId" value = "{{ degree.recId }}"/>
+                                    <div class = "success right hidden">Successfully updated!</div><br/>
+                                    <label for = "university">University:<span class = "required">*</span></label>
+                                    <input type = "text" name = "university" value = "{{ degree.university }}"/><br/>
+                                    <label for = "faculty">Faculty:</label>
+                                    <input type = "text" name = "faculty" value = "{{ degree.faculty }}"/><br/>
+                                    <label for = "speciality">Speciality:<span class = "required">*</span></label>
+                                    <input type = "text" name = "speciality" value = "{{ degree.speciality }}"/><br/>
+                                    <label for = "degree">Degree:<span class = "required">*</span></label>
+                                    <input type = "text" name = "degree" value = "{{ degree.degree }}"/><br/>
+                                    <label for = "startYear">Start year:<span class = "required">*</span></label>
+                                    <input type = "text" class = "inputDate" name = "startYear" value = "{{ degree.startDate | date('Y.m.d') }}"/><br/>
+                                    <label for = "endYear">End year:</label>
+                                    <input type = "text" class = "inputDate" name = "endYear" value = "{{ degree.endDate | date('Y.m.d') }}"/><br/>
+                                    <input type = "button" class = "submitButton right saveHighEducation" value = "Save"/>
+                                    <input type = "button" class = "submitButton right deleteHighEducation" value = "Delete"/><br/>
+                                    <div class = "errors right hidden">Please fill all required fields!</div><br/>
+                                </form>
+                                <div class = "clear"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- For Cloning -->
+                    <div class = "highEducation hidden">
+                        <form name = "highEducationForm">
+                            <div class = "optionsSubHeader">Degree:</div>
+                            <input type = "hidden" class = "highEducationRecordId" value = "0"/>
+                            <div class = "success right hidden">Successfully updated!</div><br/>
+                            <label for = "university">University:<span class = "required">*</span></label>
+                            <input type = "text" name = "university"/><br/>
+                            <label for = "faculty">Faculty:</label>
+                            <input type = "text" name = "faculty"/><br/>
+                            <label for = "speciality">Speciality:<span class = "required">*</span></label>
+                            <input type = "text" name = "speciality"/><br/>
+                            <label for = "degree">Degree:<span class = "required">*</span></label>
+                            <input type = "text" name = "degree"/><br/>
+                            <label for = "startYear">Start year:<span class = "required">*</span></label>
+                            <input type = "text" class = "inputDate" name = "startYear"/><br/>
+                            <label for = "endYear">End year:</label>
+                            <input type = "text" class = "inputDate" name = "endYear"/><br/>
+                            <input type = "button" class = "submitButton right saveHighEducation" value = "Save"/>
+                            <input type = "button" class = "submitButton right deleteHighEducation" value = "Delete"/><br/>
+                            <div class = "errors right hidden">Please fill all required fields!</div><br/>
+                         </form>
+                        <div class = "clear"></div>
+                     </div>
+                    <!-- End Cloning-->
+                </section>
+                <section class = "optionsConfiguration">
+                    <span class = "optionsHeader">Workplaces</span>
+                    <span class = "ajaxWaitSmall right"></span><br/><br/>
+                    <div class = "optionsAddPlace">
+                        Add workplace:
+                        <span class = "plusIcon right addWorkplace"></span>
+                    </div>
+                    <div id = "workplacesWrapper">
+                        {% for workplace in userWorkplaces %}
+                            <div class = "workplaces">
+                                <form name = "workplacesForm">
+                                    <div class = "optionsSubHeader">Workplace:</div>
+                                    <input type = "hidden" class = "workplaceRecordId" value = "{{ workplace.recId }}"/>
+                                    <div class = "success right hidden">Successfully updated!</div><br/>
+                                    <label for = "workplace">Workplace:<span class = "required">*</span></label>
+                                    <input type = "text" name = "workplace" value = "{{ workplace.company }}"/><br/>
+                                    <label for = "position">Position:<span class = "required">*</span></label>
+                                    <input type = "text" name = "position" value = "{{ workplace.position }}"/><br/>
+                                    <label for = "startYear">Start year:<span class = "required">*</span></label>
+                                    <input type = "text" class = "inputDate" name = "startYear" value = "{{ workplace.startDate | date('Y.m.d') }}"/><br/>
+                                    <label for = "endYear">End year:</label>
+                                    <input type = "text" class = "inputDate" name = "endYear" value = "{{ workplace.endDate | date('Y.m.d') }}"/><br/>
+                                    <input type = "button" class = "submitButton right saveWorkplace" value = "Save"/>
+                                    <input type = "button" class = "submitButton right deleteWorkplace" value = "Delete"/><br/>
+                                    <div class = "errors right hidden">Please fill all required fields!</div><br/>
+                                </form>
+                                <div class = "clear"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- For Cloning -->
+                    <div class = "workplaces hidden">
+                        <form name = "workplacesForm">
+                            <div class = "optionsSubHeader">Workplace:</div>
+                            <input type = "hidden" class = "workplaceRecordId" value = "0"/>
+                            <div class = "success right hidden">Successfully updated!</div><br/>
+                            <label for = "workplace">Workplace:<span class = "required">*</span></label>
+                            <input type = "text" name = "workplace"/><br/>
+                            <label for = "position">Position:<span class = "required">*</span></label>
+                            <input type = "text" name = "position"/><br/>
+                            <label for = "startYear">Start year:<span class = "required">*</span></label>
+                            <input type = "text" class = "inputDate" name = "startYear"/><br/>
+                            <label for = "endYear">End year:</label>
+                            <input type = "text" class = "inputDate" name = "endYear"/><br/>
+                            <input type = "button" class = "submitButton right saveWorkplace" value = "Save"/>
+                            <input type = "button" class = "submitButton right deleteWorkplace" value = "Delete"/><br/>
+                            <div class = "errors right hidden">Please fill all required fields!</div><br/>
+                         </form>
+                        <div class = "clear"></div>
+                     </div>
+                    <!-- End Cloning -->
+                </section>
+            </div>
+            <section class = "optionDescription">
+                <article class = "generalDescription">
+                    Personal data settings general description
+                </article>
+                <article class = "detailedDescription">
+                    Personal data selected option detailed description
+                </article>
+            </section>
+            <div class = "clear"></div>
+        </div>
+    </div>
+{% endblock %}

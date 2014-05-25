@@ -1,0 +1,121 @@
+{% extends 'AirSimSocialNetworkBundle:Default:layoutInner.html.twig' %}
+
+{% block pageStylesheets %}
+    <link href = "{{ asset('assets/css/contacts.css') }}" type = "text/css" rel = "stylesheet" media = "screen" />
+{% endblock pageStylesheets %}
+
+{% block pageJavaScripts %}
+    <script src ="{{ asset('assets/js/friends.js') }}" type = "text/javascript"></script>
+{% endblock pageJavaScripts %}
+
+{% block uniqueContent %}
+    <div class = "friendsWrapper">
+        <nav class = "friendsTypes">
+            <ul>
+                <a href = "all_friends"><li class = "active">Friends</li></a>
+                <a href = "add_friend"><li>Add friend</li></a>
+                <a href = "contact_updates">
+                    <li>
+                        Updates
+                        <span class = "updatesBox">+5</span>
+                    </li>
+                </a>
+            </ul><div class = "clear"></div>
+        </nav>
+        <div class = "friendsContent">
+            <div class = "alignMiddle">
+                <div class = "friendList">
+                    <div class = "right">
+                        <input type = "text" id = "searchFriendText" placeholder = "Name, family"/><input type = "button" class = "submitButton" id = "searchFriend" value = "Search"/>
+                    </div><div class = "clear"></div>
+                    <div class = "right">
+                        <input type = "button" class = "submitButton" value = "Delete selected contacts"/>
+                    </div>
+                    <div class = "friendBlocksWrap">
+                        {% for friend in userFriends %}
+                            <div class = "friend">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class = "center">
+                                                <div class = "name">{{ friend.firstName }}</div>{{ friend.lastName }}
+                                            </td>
+                                            <td>
+                                                {% if friend.webProfilePic %}
+                                                    <img src = "{{ asset('public_files/'~friend.login~'/albums/profile_pics/'~friend.webProfilePic) }}" />
+                                                {% else %}
+                                                    <img src = "{{ asset('public_files/default/noAvatarMale.png') }}" />
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                Write message<br/>
+                                                Note<br/>
+                                                History of changes
+                                            </td>
+                                            <td><input type = "checkbox" class = "friendCheck"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class = "searchCriterias">
+                    <div class = "category">Gender:</div><br/>
+                    <label for = "male">Male</label>
+                    <input type = "radio" name = "gender" id = "male" value = "male"/><br/>
+                    <label for = "female">Female</label>
+                    <input type = "radio" name = "gender" id = "female" value = "female"/><br/>
+                    <label for = "undefined">Undefined</label>
+                    <input type = "radio" name = "gender" id = "undefined" value = "undefined"/><br/>
+                    <label for = "any">Any</label>
+                    <input type = "radio" name = "gender" id = "any" value = "any" checked/><br/><br/>
+                    <div class = "category">Contact data:</div><br/>
+                    <label for = "phoneNumber">Phone number:</label>
+                    <input type = "text" name = "phoneNumber" id = "phoneNumber"/><br/>
+                    <label for = "country">Country:</label>
+                    <select name = "country" id = "country" class = "formSelect">
+                        <option value = "0"></option>
+                        <option value = "1">Estonia</option>
+                    </select><br/>
+                    <label for = "city">City:</label>
+                    <select name = "city" id = "city" class = "formSelect">
+                        <option value = "0"></option>
+                        <option value = "1">Tallinn</option>
+                    </select><br/><br/>
+                    <div class = "category">Age:</div><br/>
+                    <div class = "right">
+                        <label for = "ageFrom" class = "ageLabel">From</label>
+                        <input type = "text" class = "ageInput" name = "ageFrom" id = "ageFrom"/>
+                        <label for = "ageTo" class = "ageLabel">To</label>
+                        <input type = "text" class = "ageInput" name = "ageTo" id = "ageTo"/>
+                    </div>
+                </div>
+                <div class = "friendsStats">
+                    <div class = "category">Statistics:</div>
+                    Filter contacts: <select class = "formSelect select">
+                        <option value = "0">All contacts</option>
+                        <option value = "1">Contacts online</option>
+                        <option value = "2">General</option>
+                        <option value = "3">Friends</option>
+                        <option value = "4">Family</option>
+                        <option value = "5">Work</option>
+                        <option value = "6">Subscribed to me</option>
+                        <option value = "7">I subscribed</option>
+                        <option value = "8">Last added</option>
+                    </select><br/><br/>
+                    Total contacts: 10<br/>
+                    Contacts online: 10<br/>
+                    Contacts offline: 10<br/><br/>
+                    Subscribed to me: 10<br/>
+                    My subscription: 10<br/><br/>
+                    Groups<br/>
+                    General: 10<br/>
+                    Friends: 10<br/>
+                    Family: 10<br/>
+                    Work: 10<br/>
+                </div><div class = "clear"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

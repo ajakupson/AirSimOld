@@ -1,0 +1,95 @@
+.availableChatsWrapper
+{
+    width: 85%;
+    height: auto;
+    float: left;
+    margin: 0 0 0 15%;
+    position: relative;
+    font-size: 0.9em;
+}
+.availableChats
+{
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    padding: 30px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.availableChats ul
+{
+
+}
+.availableChats ul a
+{
+    font-size: 1em;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+}
+.availableChats ul li
+{
+    list-style: none;
+    float: left;
+    width: 30%;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid white;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.availableChats ul li:hover
+{
+    /*background-color: #f5f5f5;*/
+    border: 1px solid #27a9ff;
+
+    box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 0px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 0px 0px  rgba(0,0,0,0.2);
+}
+.availableChats ul li.unread
+{
+    background-color: #f5f5f5;
+}
+.authorPic
+{
+    width: 100px;
+    height: 100px;
+    float: right;
+    border: 1px solid lightgrey;
+    background: white;
+}
+.author
+{
+    font-weight: bold;
+    float: left;
+    padding-bottom: 15px;
+}
+.dateTime
+{
+    color: lightgrey;
+    float: left;
+    padding-bottom: 5px;
+}
+.message
+{
+    width: 60%;
+    max-width: 230px;
+    height: auto;
+    font-size: 0.8em;
+    float: left;
+}

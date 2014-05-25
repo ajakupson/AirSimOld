@@ -1,0 +1,200 @@
+.optionsWrapper
+{
+    width: 85%;
+    height: auto;
+    float: left;
+    margin: 0 0 0 15%;
+    position: relative;
+}
+.optionsTypes
+{
+    width: 100%;
+    height: auto;
+    background: #27a9ff;
+}
+.optionsTypes ul
+{
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.optionsTypes ul li
+{
+    width: 25%;
+    height: auto;
+    list-style: none;
+    float: left;
+    text-align: center;
+    padding: 15px 0 15px 0;
+    font-size: 0.8em;
+    color: white;
+    font-weight: bold;
+    border-bottom: 5px solid #279aff;
+
+    transition: background .3s;
+}
+.optionsTypes ul li:hover
+{
+    background: #8fd2fe;
+}
+.optionsTypes ul li.active
+{
+    background: #279aff;
+    line-height: 20px;
+    margin-top: -4px;
+}
+
+.optionsContent
+{
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    padding: 30px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.optionsConfiguration
+{
+    width: auto;
+    min-width: 292px;
+    height: auto;
+    font-size: 0.8em;
+    padding: 20px;
+    margin: 0 20px 20px 0;
+    float: left;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+.optionsConfiguration table.selectList
+{
+    border-spacing: 10px;
+}
+.optionsConfiguration textarea
+{
+    width: auto;
+    max-width: 135px;
+    height: auto;
+    resize: none;
+    padding: 10px;
+    outline: none;
+    border: 1px solid lightgrey;
+    font-family: Helvetica;
+}
+.optionsConfiguration textarea:focus
+{
+    border: 1px solid #27a9ff;
+    outline: none;
+    background-color: #fdfdfd;
+}
+.optionsHeader
+{
+    color: lightgrey;
+    font-size: 1em;
+    font-weight: bold;
+    border-bottom: 1px solid lightgrey;
+    padding: 0 0 5px 0;
+}
+.optionsAddPlace
+{
+    width: 100%;
+    height: auto;
+    margin: 20px 0 20px 0;
+}
+.optionsSubHeader
+{
+    width: 100%;
+    height: auto;
+    margin: 10px 0 10px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid lightgrey;
+}
+.optionsConfiguration select
+{
+    padding: 3px;
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #888;
+    border: 0;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+
+    text-indent: 0.01px;
+    text-overflow: '';
+    min-width: 120px;
+    height: 25px;
+
+    font-size: 0.9em;
+    background: #fafafa;
+    background-image: url('./../images/styles/arrowSelect.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: contain;
+    padding-right: 20px;
+}
+.optionsConfiguration select::-ms-expand
+{
+    display: none;
+}
+.mainOrAdditionalInfo
+{
+    height: auto;
+    min-height: 315px;
+}
+
+.optionDescription
+{
+    width: auto;
+    width: 23%;
+    height: auto;
+    position: relative;
+    float: left;
+    margin: 0 0 0 0;
+    font-size: 0.8em;
+}
+.generalDescription, .detailedDescription
+{
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    clear: right;
+    margin: 0 0 15px 0;
+
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
+    -o-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 1px 0px  rgba(0,0,0,0.2);
+}
+
+.personalFormsWrapper
+{
+    float: left;
+    width: auto;
+    max-width: 705px;
+    height: auto;
+}
+.personalDataForm select
+{
+    width: 162px;
+    height: 25px;
+    margin: 5px 0 0 0;
+}
+.inputDate
+{
+    max-width: 126px;
+}
