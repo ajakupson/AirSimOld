@@ -117,8 +117,7 @@ class AccountsController extends Controller
             'userLastName' => $userEntity->getLastName(),
             'userWebPic' => $userEntity->getWebProfilePic()
         );
-        $configsRepo = $entityManager->getRepository('AirSimSocialNetworkBundle:UserConfig');
-        $configEntity = $configsRepo->findOneBy(array('userId' => $userId));
+        $configEntity = $userEntity->getConfig();
         $userConfig = array
         (
             'phoneVisibility' => $configEntity->getPrivPhoneVisibility(),

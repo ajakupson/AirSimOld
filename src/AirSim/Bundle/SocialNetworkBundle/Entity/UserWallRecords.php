@@ -6,56 +6,82 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserWallRecords
+ *
+ * @ORM\Table(name="user_wall_records", indexes={@ORM\Index(name="FK_user_wall_records", columns={"to_id"})})
+ * @ORM\Entity
  */
 class UserWallRecords
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="wall_rec_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $toId;
+    private $wallRecId;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
     private $authorId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="record_text", type="text", nullable=false)
      */
     private $recordText;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="datetime", nullable=false)
      */
     private $dateAdded;
 
     /**
-     * @var integer
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="to_id", referencedColumnName="user_id")
+     * })
      */
-    private $wallRecId;
-
+    private $to;
 
     /**
-     * Set toId
+     * @var Collection
      *
-     * @param integer $toId
-     * @return UserWallRecords
+     * @ORM\OneToMany(targetEntity="WallRecordLikes", mappedBy="wallRec")
      */
-    public function setToId($toId)
-    {
-        $this->toId = $toId;
+    private $wallRecordLikes;
 
-        return $this;
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="WallRecordPictures", mappedBy="wallRec")
+     */
+    private $wallRecordPictures;
+
+    public function __construct()
+    {
+        $this->wallRecordLikes = new ArrayCollection();
+        $this->wallRecordPictures = new ArrayCollection();
     }
 
+
+
     /**
-     * Get toId
+     * Get wallRecId
      *
      * @return integer 
      */
-    public function getToId()
+    public function getWallRecId()
     {
-        return $this->toId;
+        return $this->wallRecId;
     }
 
     /**
@@ -128,12 +154,91 @@ class UserWallRecords
     }
 
     /**
-     * Get wallRecId
+     * Set to
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\Users $to
+     * @return UserWallRecords
      */
-    public function getWallRecId()
+    public function setTo(\AirSim\Bundle\SocialNetworkBundle\Entity\Users $to = null)
     {
-        return $this->wallRecId;
+        $this->to = $to;
+
+        return $this;
+    }
+
+    /**
+     * Get to
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\Users 
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * Add wallRecordLikes
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordLikes $wallRecordLikes
+     * @return UserWallRecords
+     */
+    public function addWallRecordLike(\AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordLikes $wallRecordLikes)
+    {
+        $this->wallRecordLikes[] = $wallRecordLikes;
+
+        return $this;
+    }
+
+    /**
+     * Remove wallRecordLikes
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordLikes $wallRecordLikes
+     */
+    public function removeWallRecordLike(\AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordLikes $wallRecordLikes)
+    {
+        $this->wallRecordLikes->removeElement($wallRecordLikes);
+    }
+
+    /**
+     * Get wallRecordLikes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWallRecordLikes()
+    {
+        return $this->wallRecordLikes;
+    }
+
+    /**
+     * Add wallRecordPictures
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordPictures $wallRecordPictures
+     * @return UserWallRecords
+     */
+    public function addWallRecordPicture(\AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordPictures $wallRecordPictures)
+    {
+        $this->wallRecordPictures[] = $wallRecordPictures;
+
+        return $this;
+    }
+
+    /**
+     * Remove wallRecordPictures
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordPictures $wallRecordPictures
+     */
+    public function removeWallRecordPicture(\AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordPictures $wallRecordPictures)
+    {
+        $this->wallRecordPictures->removeElement($wallRecordPictures);
+    }
+
+    /**
+     * Get wallRecordPictures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWallRecordPictures()
+    {
+        return $this->wallRecordPictures;
     }
 }

@@ -6,81 +6,109 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserPhotos
+ *
+ * @ORM\Table(name="user_photos", indexes={@ORM\Index(name="FK_photos_albums", columns={"album_id"})})
+ * @ORM\Entity
  */
 class UserPhotos
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="photo_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $albumId;
+    private $photoId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="photo_name", type="string", length=255, nullable=false)
      */
     private $photoName;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="photo_title", type="string", length=200, nullable=true)
      */
     private $photoTitle;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="photo_description", type="string", length=750, nullable=true)
      */
     private $photoDescription;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="datetime", nullable=false)
      */
     private $dateAdded;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="is_cover", type="boolean", nullable=false)
      */
     private $isCover;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      */
     private $latitude;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      */
     private $longitude;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
      */
     private $address;
 
     /**
-     * @var integer
+     * @var \UserPhotoAlbums
+     *
+     * @ORM\ManyToOne(targetEntity="UserPhotoAlbums")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="album_id", referencedColumnName="album_id")
+     * })
      */
-    private $photoId;
-
+    private $album;
 
     /**
-     * Set albumId
+     * @var Collection
      *
-     * @param integer $albumId
-     * @return UserPhotos
+     * @ORM\OneToMany(targetEntity="PhotoComments", mappedBy="photo")
      */
-    public function setAlbumId($albumId)
-    {
-        $this->albumId = $albumId;
+    private $photoComments;
 
-        return $this;
+    public function __construct()
+    {
+        $this->photoComments = new ArrayCollection();
     }
 
+
+
     /**
-     * Get albumId
+     * Get photoId
      *
      * @return integer 
      */
-    public function getAlbumId()
+    public function getPhotoId()
     {
-        return $this->albumId;
+        return $this->photoId;
     }
 
     /**
@@ -268,12 +296,58 @@ class UserPhotos
     }
 
     /**
-     * Get photoId
+     * Set album
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\UserPhotoAlbums $album
+     * @return UserPhotos
      */
-    public function getPhotoId()
+    public function setAlbum(\AirSim\Bundle\SocialNetworkBundle\Entity\UserPhotoAlbums $album = null)
     {
-        return $this->photoId;
+        $this->album = $album;
+
+        return $this;
+    }
+
+    /**
+     * Get album
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\UserPhotoAlbums 
+     */
+    public function getAlbum()
+    {
+        return $this->album;
+    }
+
+    /**
+     * Add photoComments
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\PhotoComments $photoComments
+     * @return UserPhotos
+     */
+    public function addPhotoComment(\AirSim\Bundle\SocialNetworkBundle\Entity\PhotoComments $photoComments)
+    {
+        $this->photoComments[] = $photoComments;
+
+        return $this;
+    }
+
+    /**
+     * Remove photoComments
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\PhotoComments $photoComments
+     */
+    public function removePhotoComment(\AirSim\Bundle\SocialNetworkBundle\Entity\PhotoComments $photoComments)
+    {
+        $this->photoComments->removeElement($photoComments);
+    }
+
+    /**
+     * Get photoComments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotoComments()
+    {
+        return $this->photoComments;
     }
 }

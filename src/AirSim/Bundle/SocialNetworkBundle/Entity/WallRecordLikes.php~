@@ -6,56 +6,62 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * WallRecordLikes
+ *
+ * @ORM\Table(name="wall_record_likes", indexes={@ORM\Index(name="FK_wall_record_likes", columns={"wall_rec_id"})})
+ * @ORM\Entity
  */
 class WallRecordLikes
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="rec_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $wallRecId;
+    private $recId;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="like_dislike", type="boolean", nullable=false)
      */
     private $likeDislike;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_rated", type="datetime", nullable=false)
      */
     private $dateRated;
 
     /**
-     * @var integer
-     */
-    private $recId;
-
-
-    /**
-     * Set wallRecId
+     * @var \UserWallRecords
      *
-     * @param integer $wallRecId
-     * @return WallRecordLikes
+     * @ORM\ManyToOne(targetEntity="UserWallRecords")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="wall_rec_id", referencedColumnName="wall_rec_id")
+     * })
      */
-    public function setWallRecId($wallRecId)
-    {
-        $this->wallRecId = $wallRecId;
+    private $wallRec;
 
-        return $this;
-    }
+
 
     /**
-     * Get wallRecId
+     * Get recId
      *
      * @return integer 
      */
-    public function getWallRecId()
+    public function getRecId()
     {
-        return $this->wallRecId;
+        return $this->recId;
     }
 
     /**
@@ -128,12 +134,25 @@ class WallRecordLikes
     }
 
     /**
-     * Get recId
+     * Set wallRec
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\UserWallRecords $wallRec
+     * @return WallRecordLikes
      */
-    public function getRecId()
+    public function setWallRec(\AirSim\Bundle\SocialNetworkBundle\Entity\UserWallRecords $wallRec = null)
     {
-        return $this->recId;
+        $this->wallRec = $wallRec;
+
+        return $this;
+    }
+
+    /**
+     * Get wallRec
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\UserWallRecords 
+     */
+    public function getWallRec()
+    {
+        return $this->wallRec;
     }
 }

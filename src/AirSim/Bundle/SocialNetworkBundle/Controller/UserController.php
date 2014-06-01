@@ -2,6 +2,7 @@
 
 namespace AirSim\Bundle\SocialNetworkBundle\Controller;
 
+use AirSim\Bundle\SocialNetworkBundle\Entity\PhotoComments;
 use AirSim\Bundle\SocialNetworkBundle\Entity\UserWallRecords;
 use AirSim\Bundle\SocialNetworkBundle\Entity\WallRecordLikes;
 use AirSim\Bundle\SocialNetworkBundle\Modules\AlbumModule;
@@ -60,27 +61,40 @@ class UserController extends Controller
         $pages[] = 0;
         $selectedLang = $this->session->get('lang');
 
+        $pages[] = 1;
+        $translations = $this->get('TranslationModule')->getPageTranslations($this->entityManager, $pages, $selectedLang);
+
         //$userId = $this->session->get('userSessionData')['userInfo']['userId'];
         /* User Info Block */
         $userData =  UserModule::getUserData($this->entityManager, $username);
-        $userHighEducation = UserModule::getUserHighEducation($this->entityManager, $username);
-        $userWorkplaces = UserModule::getUserWorkplaces($this->entityManager, $username);
+        //$userHighEducation = UserModule::getUserHighEducation($this->entityManager, $username);
+        //$userWorkplaces = UserModule::getUserWorkplaces($this->entityManager, $username);
+        $userHighEducation = $userData->getHighEducation();
+        $userWorkplaces = $userData->getWorkplaces();
 
         /* Contacts Blocks */
-        $userLastContacts = UserModule::getUserFriends($this->entityManager, $username, 7, 0, 'dateAdded', 'DESC');
-        $contacts = UserModule::getUserFriends($this->entityManager, $username, 9);
+        //$userLastContacts = UserModule::getUserFriends($this->entityManager, $username, 7, 0, 'dateAdded', 'DESC');
+        //$contacts = UserModule::getUserFriends($this->entityManager, $username, 9);
+       // $userLastContacts = $userData->getFriends();
+        //$contacts = $userData->getFriends();
 
         /* Last Photos Block */
-        $userLastPhotos = PhotosModule::getLastPhotos($this->entityManager, $userData[0]);
+        //$userLastPhotos = $userData->getPhotoAlbums()->getAlbumPhotos();
+
 
         /* Wall Block */
         $whoId = $this->session->get('userSessionData')['userInfo']['userId'];
-        $userWallRecords = UserWallModule::getUserWallRecords($this->entityManager, $userData[0], $whoId);
+        //$userWallRecords = UserWallModule::getUserWallRecords($this->entityManager, $userData[0], $whoId);
 
         return $this->render('AirSimSocialNetworkBundle:Default:user.html.twig',
-            array('userData' => $userData, 'userHighEducation' => $userHighEducation, 'userWorkplaces' => $userWorkplaces,
+            array('translations' => $translations, 'userData' => $userData, 'userHighEducation' => $userHighEducation, 'userWorkplaces' => $userWorkplaces,
+                'userLastContacts' => '', 'userLastPhotos' => '', 'contacts' => '',
+                'userWallRecords' => ''/*$userWallRecords*/));
+
+        /*return $this->render('AirSimSocialNetworkBundle:Default:user.html.twig',
+            array('translations' => $translations, 'userData' => $userData, 'userHighEducation' => $userHighEducation, 'userWorkplaces' => $userWorkplaces,
                 'userLastContacts' => $userLastContacts, 'userLastPhotos' => $userLastPhotos, 'contacts' => $contacts,
-                'userWallRecords' => $userWallRecords));
+                'userWallRecords' => ''$userWallRecords));*/
 
     }
 
@@ -100,8 +114,11 @@ class UserController extends Controller
         $previousPhotoId = PhotosModule::albumHasPreviousPhoto($entityManager, $albumId, $photoId);
         $nextPhotoId = PhotosModule::albumHasNextPhoto($entityManager, $albumId, $photoId);
 
+        $photoComments = PhotosModule::getPhotoComments($entityManager, $photoId);
+
         $photoData = array
         (
+            'username' => $photoObject['login'],
             'albumId' => $albumId,
             'albumName' => $photoObject['albumName'],
             'photoId' => $photoId,
@@ -114,12 +131,74 @@ class UserController extends Controller
             'longitude' => $photoObject[0]->getLongitude(),
             'photoAddress' => $photoObject[0]->getAddress(),
             'previousPhotoId' => $previousPhotoId,
-            'nextPhotoId' => $nextPhotoId
+            'nextPhotoId' => $nextPhotoId,
+            'photoComments' => $photoComments
         );
 
         $success = true;
         $response = array('success' => $success, 'error' => $error, 'data' => array("photoData" => $photoData));
         return new Response(json_encode($response));
+    }
+
+    public function commentPhotoAction()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $session = $request->getSession();
+
+        $photoId = $request->get('photoId');
+        $receiverId = $request->get('receiverId');
+        $commentText = $request->get('commentText');
+        $senderId = $session->get('userSessionData')['userInfo']['userId'];
+        $dateTime = new \DateTime();
+
+        $commentEntity = new PhotoComments();
+        $commentEntity->setPhotoId($photoId);
+        $commentEntity->setUserId($senderId);
+        $commentEntity->setComment($commentText);
+        $commentEntity->setDateAdded($dateTime);
+
+        $entityManager->persist($commentEntity);
+        $entityManager->flush();
+
+        $commentId = $commentEntity->getCommentId();
+        $senderEntity = UserModule::getUserDataById($entityManager, $senderId);
+
+        $senderData = array
+        (
+            'senderUsername' => $senderEntity[0]->getLogin(),
+            'senderName' => $senderEntity[0]->getFirstName(),
+            'senderFamily' => $senderEntity[0]->getLastName(),
+            'senderWebPic' => $senderEntity[0]->getWebProfilePic()
+        );
+        $receiverData = array
+        (
+            'receiverId' => $receiverId
+        );
+        $eventData = array
+        (
+            'success' => true,
+            'event' => 'photoComment',
+            'page' => 'user'.$receiverId,
+            'photoId' => $photoId,
+            'commentId' => $commentId,
+            'messageText' => $commentText,
+            'dateTime' => $dateTime->format('d.m.Y h:i:s')
+        );
+        $response = array
+        (
+            'senderData' => $senderData,
+            'receiverData' => $receiverData,
+            'eventData' => $eventData
+        );
+        $jsonResponse = json_encode($response);
+
+        $context = new \ZMQContext();
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
+        $socket->connect("tcp://80.66.252.45:5555");
+        $socket->send(json_encode($jsonResponse));
+
+        return new Response($jsonResponse);
     }
 
     public function addWallRecordAction()
@@ -131,14 +210,12 @@ class UserController extends Controller
         $request = $this->get('request_stack')->getCurrentRequest();
         $session = $request->getSession();
 
-        $userId = $request->get('userId');
+        $receiverId = $request->get('receiverId');
         $page = $request->get('page');
-        $event = $request->get('event');
         $text = $request->get('text');
         $userData= $session->get('userSessionData');
         $authorPic = $userData['userInfo']['userWebPic'];
-        $username = $userData['userInfo']['username'];
-        $authorPicPath = './../../public_files/'.$username.'/albums/profile_pics/'.$authorPic;
+        $authorUsername = $userData['userInfo']['username'];
         $authorName = $userData['userInfo']['userFirstName'];
         $authorFamily = $userData['userInfo']['userLastName'];
         $recordDate = new \DateTime();
@@ -147,7 +224,7 @@ class UserController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         $wallRecordEntity = new UserWallRecords();
-        $wallRecordEntity->setToId($userId);
+        $wallRecordEntity->setToId($receiverId);
         $wallRecordEntity->setAuthorId($userData['userInfo']['userId']);
         $wallRecordEntity->setRecordText($text);
         $wallRecordEntity->setDateAdded(new \DateTime());
@@ -157,7 +234,7 @@ class UserController extends Controller
         $newWallRecordId = $wallRecordEntity->getWallRecId();
 
         /* ***** Wall Pictures ***** */
-        $username = UserModule::getUsernameById($entityManager, $userId);
+        $username = UserModule::getUsernameById($entityManager, $receiverId);
         $uploadDirectory = './../web/public_files/'.$username.'/albums/wall_pics';
         $albumDirectory = '/AirSim/web/public_files/'.$username.'/albums/wall_pics/';
 
@@ -174,7 +251,7 @@ class UserController extends Controller
                     $picture->move($uploadDirectory, $fileName);
                     $filePath = $albumDirectory.$fileName;
 
-                    $albumId = AlbumModule::getWallPicsAlbumId($entityManager, $userId);
+                    $albumId = AlbumModule::getWallPicsAlbumId($entityManager, $receiverId);
                     $photoEntity = new UserPhotos();
                     $photoEntity->setAlbumId($albumId);
                     $photoEntity->setPhotoName($fileName);
@@ -184,6 +261,7 @@ class UserController extends Controller
                     $entityManager->flush();
 
                     $pictureId = $photoEntity->getPhotoId();
+
                     $wallRecordPicEntity = new WallRecordPictures();
                     $wallRecordPicEntity->setWallRecId($newWallRecordId);
                     $wallRecordPicEntity->setPictureId($pictureId);
@@ -192,42 +270,46 @@ class UserController extends Controller
 
                     $addedPictures[] = array
                     (
-                        'fileName' => $fileName,
-                        'fileId' => $pictureId
+                        'fileId' => $pictureId,
+                        'fileName' => $fileName
                     );
                 }
             }
         }
-        /* ***** */
 
-        $data = array
+        $senderData = array
         (
-            'text' => $text,
-            'addedPics' => $addedPictures,
-            'toUsername' => $username,
-            'authorPic' => $authorPicPath,
-            'authorName' => $authorName,
-            'authorFamily' => $authorFamily,
-            'recordDate' => $recordDateFormatted,
-            'newWallRecordId' => $newWallRecordId
+            'senderUsername' => $authorUsername,
+            'senderName' => $authorName,
+            'senderFamily' => $authorFamily,
+            'senderWebPic' => $authorPic
         );
-
-        /*if($userId != $userData['userInfo']['userId'])
-            $data['toId'] = $userId;*/
-
-        $response = array
+        $receiverData = array
+        (
+            'receiverId' => $receiverId,
+            'receiverUsername' => $username,
+        );
+        $eventData = array
         (
             'success' => true,
             'page' => $page,
-            'event' => $event,
-            'data' => $data
+            'event' => 'addWallRecord',
+            'messageText' => $text,
+            'addedPics' => $addedPictures,
+            'recordDate' => $recordDateFormatted,
+            'newWallRecordId' => $newWallRecordId
+        );
+        $response = array
+        (
+            'senderData' => $senderData,
+            'receiverData' => $receiverData,
+            'eventData' => $eventData
         );
         $jsonResponse = json_encode($response);
 
         $context = new \ZMQContext();
         $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
         $socket->connect("tcp://80.66.252.45:5555");
-
         $socket->send(json_encode($jsonResponse));
 
         return new Response($jsonResponse);
@@ -240,19 +322,18 @@ class UserController extends Controller
 
         $request = $this->get('request_stack')->getCurrentRequest();
         $session = $request->getSession();
-        $userId = $session->get('userSessionData')['userInfo']['userId'];
+        $senderId = $session->get('userSessionData')['userInfo']['userId'];
         $page = $request->get('page');
-        $event = $request->get('event');
         $wallRecordId = $request->get('wallRecordId');
 
         $entityManager = $this->getDoctrine()->getManager();
         $wallRecordLikesRepo = $entityManager->getRepository('AirSimSocialNetworkBundle:WallRecordLikes');
-        $likeEntity = $wallRecordLikesRepo->findOneBy(array('wallRecId' => $wallRecordId, 'userId' => $userId));
+        $likeEntity = $wallRecordLikesRepo->findOneBy(array('wallRecId' => $wallRecordId, 'userId' => $senderId));
         $flag = '';
         if(sizeof($likeEntity) == 0)
         {
             $likeEntity = new WallRecordLikes();
-            $likeEntity->setUserId($userId);
+            $likeEntity->setUserId($senderId);
             $likeEntity->setWallRecId($wallRecordId);
             $likeEntity->setLikeDislike(1);
             $likeEntity->setDateRated(new \DateTime());
@@ -268,24 +349,37 @@ class UserController extends Controller
         $entityManager->persist($likeEntity);
         $entityManager->flush();
 
-        $data = array
+        $senderData = array
         (
+            'senderUsername' => $session->get('userSessionData')['userInfo']['username'],
+            'senderName' => $session->get('userSessionData')['userInfo']['userFirstName'],
+            'senderFamily' => $session->get('userSessionData')['userInfo']['userLastName'],
+            'senderWebPic' => $session->get('userSessionData')['userInfo']['userWebPic']
+        );
+        $receiverData = array
+        (
+            'receiverId' => $request->get('receiverId')
+        );
+        $eventData = array
+        (
+            'success' => true,
+            'page' => $page,
+            'event' => 'likeWallRecord',
+            'messageText' => '',
             'wallRecordId' => $wallRecordId,
             'flag' => $flag
         );
         $response = array
         (
-            'success' => true,
-            'page' => $page,
-            'event' => $event,
-            'data' => $data
+            'senderData' => $senderData,
+            'receiverData' => $receiverData,
+            'eventData' => $eventData
         );
         $jsonResponse = json_encode($response);
 
         $context = new \ZMQContext();
         $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
         $socket->connect("tcp://80.66.252.45:5555");
-
         $socket->send(json_encode($jsonResponse));
 
         return new Response($jsonResponse);
@@ -298,19 +392,18 @@ class UserController extends Controller
 
         $request = $this->get('request_stack')->getCurrentRequest();
         $session = $request->getSession();
-        $userId = $session->get('userSessionData')['userInfo']['userId'];
+        $senderId = $session->get('userSessionData')['userInfo']['userId'];
         $page = $request->get('page');
-        $event = $request->get('event');
         $wallRecordId = $request->get('wallRecordId');
 
         $entityManager = $this->getDoctrine()->getManager();
         $wallRecordLikesRepo = $entityManager->getRepository('AirSimSocialNetworkBundle:WallRecordLikes');
-        $likeEntity = $wallRecordLikesRepo->findOneBy(array('wallRecId' => $wallRecordId, 'userId' => $userId));
+        $likeEntity = $wallRecordLikesRepo->findOneBy(array('wallRecId' => $wallRecordId, 'userId' => $senderId));
         $flag = '';
         if(sizeof($likeEntity) == 0)
         {
             $likeEntity = new WallRecordLikes();
-            $likeEntity->setUserId($userId);
+            $likeEntity->setUserId($senderId);
             $likeEntity->setWallRecId($wallRecordId);
             $likeEntity->setLikeDislike(0);
             $likeEntity->setDateRated(new \DateTime());
@@ -326,24 +419,37 @@ class UserController extends Controller
         $entityManager->persist($likeEntity);
         $entityManager->flush();
 
-        $data = array
+        $senderData = array
         (
+            'senderUsername' => $session->get('userSessionData')['userInfo']['username'],
+            'senderName' => $session->get('userSessionData')['userInfo']['userFirstName'],
+            'senderFamily' => $session->get('userSessionData')['userInfo']['userLastName'],
+            'senderWebPic' => $session->get('userSessionData')['userInfo']['userWebPic']
+        );
+        $receiverData = array
+        (
+            'receiverId' => $request->get('receiverId')
+        );
+        $eventData = array
+        (
+            'success' => true,
+            'page' => $page,
+            'event' => 'dislikeWallRecord',
+            'messageText' => '',
             'wallRecordId' => $wallRecordId,
             'flag' => $flag
         );
         $response = array
         (
-            'success' => true,
-            'page' => $page,
-            'event' => $event,
-            'data' => $data
+            'senderData' => $senderData,
+            'receiverData' => $receiverData,
+            'eventData' => $eventData
         );
         $jsonResponse = json_encode($response);
 
         $context = new \ZMQContext();
         $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
         $socket->connect("tcp://80.66.252.45:5555");
-
         $socket->send(json_encode($jsonResponse));
 
         return new Response($jsonResponse);
@@ -357,7 +463,6 @@ class UserController extends Controller
         $request = $this->get('request_stack')->getCurrentRequest();
         $session = $request->getSession();
         $page = $request->get('page');
-        $event = $request->get('event');
         $wallRecordId = $request->get('wallRecordId');
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -366,23 +471,36 @@ class UserController extends Controller
         $entityManager->remove($wallRecordEntity);
         $entityManager->flush();
 
-        $data = array
+        $senderData = array
         (
+            'senderUsername' => $session->get('userSessionData')['userInfo']['username'],
+            'senderName' => $session->get('userSessionData')['userInfo']['userFirstName'],
+            'senderFamily' => $session->get('userSessionData')['userInfo']['userLastName'],
+            'senderWebPic' => $session->get('userSessionData')['userInfo']['userWebPic']
+        );
+        $receiverData = array
+        (
+            'receiverId' => ''
+        );
+        $eventData = array
+        (
+            'success' => true,
+            'page' => $page,
+            'event' => 'deleteWallRecord',
+            'messageText' => '',
             'wallRecordId' => $wallRecordId
         );
         $response = array
         (
-            'success' => true,
-            'page' => $page,
-            'event' => $event,
-            'data' => $data
+            'senderData' => $senderData,
+            'receiverData' => $receiverData,
+            'eventData' => $eventData
         );
         $jsonResponse = json_encode($response);
 
         $context = new \ZMQContext();
         $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
         $socket->connect("tcp://80.66.252.45:5555");
-
         $socket->send(json_encode($jsonResponse));
 
         return new Response($jsonResponse);

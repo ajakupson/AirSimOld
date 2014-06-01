@@ -6,71 +6,90 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserHighEducation
+ *
+ * @ORM\Table(name="user_high_education", indexes={@ORM\Index(name="FK_user_high_education", columns={"user_id"})})
+ * @ORM\Entity
  */
 class UserHighEducation
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="rec_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $recId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="highEducation")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
     private $userId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="university", type="string", length=200, nullable=false)
      */
+
     private $university;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="faculty", type="string", length=200, nullable=true)
      */
     private $faculty;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="speciality", type="string", length=100, nullable=false)
      */
     private $speciality;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="degree", type="string", length=50, nullable=false)
      */
     private $degree;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="start_date", type="date", nullable=false)
      */
     private $startDate;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="end_date", type="date", nullable=true)
      */
     private $endDate;
 
     /**
-     * @var integer
-     */
-    private $recId;
-
-
-    /**
-     * Set userId
+     * @var \Users
      *
-     * @param integer $userId
-     * @return UserHighEducation
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * })
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
+    private $user;
 
-        return $this;
-    }
+
 
     /**
-     * Get userId
+     * Get recId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getRecId()
     {
-        return $this->userId;
+        return $this->recId;
     }
 
     /**
@@ -212,12 +231,48 @@ class UserHighEducation
     }
 
     /**
-     * Get recId
+     * Set userId
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\Users $userId
+     * @return UserHighEducation
      */
-    public function getRecId()
+    public function setUserId(\AirSim\Bundle\SocialNetworkBundle\Entity\Users $userId = null)
     {
-        return $this->recId;
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\Users 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\Users $user
+     * @return UserHighEducation
+     */
+    public function setUser(\AirSim\Bundle\SocialNetworkBundle\Entity\Users $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\Users 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

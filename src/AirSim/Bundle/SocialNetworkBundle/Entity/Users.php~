@@ -2,98 +2,224 @@
 
 namespace AirSim\Bundle\SocialNetworkBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\ResourceBundle\Util\ArrayAccessibleResourceBundle;
 
 /**
  * Users
+ *
+ * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="login", columns={"login", "phone_number", "email"})}, indexes={@ORM\Index(name="FK_user_config", columns={"config_id"})})
+ * @ORM\Entity
  */
 class Users
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $userId;
+
+    /**
      * @var string
+     *
+     * @ORM\Column(name="login", type="string", length=30, nullable=false)
      */
     private $login;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=32, nullable=false)
      */
     private $password;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=30, nullable=false)
      */
     private $phoneNumber;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="operator", type="string", length=15, nullable=false)
      */
     private $operator;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=35, nullable=false)
      */
     private $firstName;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=35, nullable=false)
      */
     private $lastName;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=1, nullable=false)
      */
     private $gender;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="birthdate", type="date", nullable=true)
      */
     private $birthdate;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=100, nullable=true)
      */
     private $email;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
      */
     private $country;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
      */
     private $city;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=100, nullable=true)
      */
     private $address;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=50, nullable=true)
      */
     private $website;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="web_profile_pic", type="string", length=150, nullable=true)
      */
     private $webProfilePic;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="phone_profile_pic", type="string", length=150, nullable=true)
      */
     private $phoneProfilePic;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="profile_cover", type="string", length=150, nullable=true)
+     */
+    private $profileCover;
+
+    /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="logged_in_time", type="datetime", nullable=false)
      */
     private $loggedInTime;
 
     /**
-     * @var integer
+     * @var \UserConfig
+     *
+     * @ORM\OneToOne(targetEntity="UserConfig")
+     * @ORM\JoinColumn(name="config_id", referencedColumnName="config_id")
      */
-    private $userId;
+    private $config;
 
+    /**
+     * @var Collection
+     * 
+     * @ORM\OneToMany(targetEntity="UserHighEducation", mappedBy="userId")
+     */
+    private $highEducation;
+
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="UserWorkplaces", mappedBy="userId")
+     */
+    private $workplaces;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="UserWallRecords", mappedBy="to")
+     */
+    private $wallRecords;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="UserPhotoAlbums", mappedBy="user")
+     */
+    private $photoAlbums;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="UserFriends", mappedBy="user")
+     */
+    private $friends;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="ChatMembers", mappedBy="user")
+     */
+    private $chatsMember;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="ChatMessages", mappedBy="user")
+     */
+    private $chatMessages;
+
+
+    public function __construct()
+    {
+        $this->highEducation = new ArrayCollection();
+        $this->workplaces = new ArrayCollection();
+        $this->wallRecords = new ArrayCollection();
+        $this->photoAlbums = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->chatsMember = new ArrayCollection();
+        $this->chatMessages = new ArrayCollection();
+    }
+    /**
+     * Get userId
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
 
     /**
      * Set login
@@ -441,6 +567,29 @@ class Users
     }
 
     /**
+     * Set profileCover
+     *
+     * @param string $profileCover
+     * @return Users
+     */
+    public function setProfileCover($profileCover)
+    {
+        $this->profileCover = $profileCover;
+
+        return $this;
+    }
+
+    /**
+     * Get profileCover
+     *
+     * @return string 
+     */
+    public function getProfileCover()
+    {
+        return $this->profileCover;
+    }
+
+    /**
      * Set loggedInTime
      *
      * @param \DateTime $loggedInTime
@@ -464,40 +613,48 @@ class Users
     }
 
     /**
-     * Get userId
+     * Set config
      *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-    /**
-     * @var string
-     */
-    private $profileCover;
-
-
-    /**
-     * Set profileCover
-     *
-     * @param string $profileCover
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\UserConfig $config
      * @return Users
      */
-    public function setProfileCover($profileCover)
+    public function setConfig(\AirSim\Bundle\SocialNetworkBundle\Entity\UserConfig $config = null)
     {
-        $this->profileCover = $profileCover;
+        $this->config = $config;
 
         return $this;
     }
 
     /**
-     * Get profileCover
+     * Get config
      *
-     * @return string 
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\UserConfig 
      */
-    public function getProfileCover()
+    public function getConfig()
     {
-        return $this->profileCover;
+        return $this->config;
+    }
+
+    /**
+     * Add highEducation
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\UserHighEducation $highEducation
+     * @return Users
+     */
+    public function addHighEducation(\AirSim\Bundle\SocialNetworkBundle\Entity\UserHighEducation $highEducation)
+    {
+        $this->highEducation[] = $highEducation;
+
+        return $this;
+    }
+
+    /**
+     * Remove highEducation
+     *
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\UserHighEducation $highEducation
+     */
+    public function removeHighEducation(\AirSim\Bundle\SocialNetworkBundle\Entity\UserHighEducation $highEducation)
+    {
+        $this->highEducation->removeElement($highEducation);
     }
 }

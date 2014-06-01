@@ -15,7 +15,7 @@ class UserModule
             ->setParameter('login', $login);
         $user = $query->getQuery()->getResult();
 
-        return $user;
+        return $user[0];
     }
 
     public static function getUserDataById($entityManager, $userId)
@@ -48,12 +48,19 @@ class UserModule
     public static function getUserHighEducation($entityManager, $username)
     {
         $query = $entityManager->createQueryBuilder();
-        $query
+        /*$query
             ->select('userHighEducation')
             ->from('AirSimSocialNetworkBundle:UserHighEducation', 'userHighEducation')
             ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
             ->where('userHighEducation.userId = user.userId')
             ->andWhere('user.login = :login')
+            ->setParameter('login', $username)
+            ->orderBy('userHighEducation.startDate', 'ASC');*/
+        $query
+            ->select('userHighEducation')
+            ->from('AirSimSocialNetworkBundle:Users', 'user')
+            ->innerJoin('AirSimSocialNetworkBundle:UserHighEducation', 'userHighEducation')
+            ->andWhere('user.userId = :login')
             ->setParameter('login', $username)
             ->orderBy('userHighEducation.startDate', 'ASC');
         $userHighEducation = $query->getQuery()->getResult();
@@ -64,11 +71,18 @@ class UserModule
     public static function getUserWorkplaces($entityManager, $username)
     {
         $query = $entityManager->createQueryBuilder();
-        $query
+        /*$query
             ->select('userWorkplaces')
             ->from('AirSimSocialNetworkBundle:UserWorkplaces', 'userWorkplaces')
             ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
             ->where('userWorkplaces.userId = user.userId')
+            ->andWhere('user.login = :login')
+            ->setParameter('login', $username)
+            ->orderBy('userWorkplaces.startDate', 'ASC');*/
+        $query
+            ->select('userWorkplaces')
+            ->from('AirSimSocialNetworkBundle:UserWorkplaces', 'userWorkplaces')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
             ->andWhere('user.login = :login')
             ->setParameter('login', $username)
             ->orderBy('userWorkplaces.startDate', 'ASC');
@@ -83,9 +97,34 @@ class UserModule
         $usersRepo = $entityManager->getRepository('AirSimSocialNetworkBundle:Users');
         $userId = $usersRepo->findOneBy(array('login' => $username))->getUserId();
 
-        if($limit == 0)
+        /*if($limit == 0)
             $userFriends = $friendsRepo->findBy(array('userId' => $userId, 'isAccepted' => 1), array($sortBy => $sortType));
-        else $userFriends = $friendsRepo->findBy(array('userId' => $userId, 'isAccepted' => 1), array($sortBy => $sortType), $limit, $offset);
+        else $userFriends = $friendsRepo->findBy(array('userId' => $userId, 'isAccepted' => 1), array($sortBy => $sortType), $limit, $offset);*/
+        $query = $entityManager->createQueryBuilder();
+        if($limit == 0)
+        {
+            $query
+                ->select('userFriends')
+                ->from('AirSimSocialNetworkBundle:UserFriends', 'userFriends')
+                ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
+                ->andWhere('user.login = :login')
+                ->setParameter('login', $username);
+                /*->orderBy('userWorkplaces.startDate', 'ASC');*/
+            $userFriends = $query->getQuery()->getResult();
+        }
+        else
+        {
+            $query
+                ->select('userFriends')
+                ->from('AirSimSocialNetworkBundle:UserFriends', 'userFriends')
+                ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
+                ->andWhere('user.login = :login')
+                ->setParameter('login', $username)
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+            /*->orderBy('userWorkplaces.startDate', 'ASC');*/
+            $userFriends = $query->getQuery()->getResult();
+        }
 
         $userFriendsEntities = array();
         foreach($userFriends as $friend)

@@ -5,9 +5,93 @@
 {% endblock pageStylesheets %}
 
 {% block pageJavaScripts %}
-    <script src ="{{ asset('assets/js/chatRoom.js') }}" type = "text/javascript"></script>
+    <script src ="{{ asset('assets/js/websocket/chatRoomWebSocket.js') }}" type = "text/javascript"></script>
 {% endblock pageJavaScripts %}
 
 {% block uniqueContent %}
-    Chat with user
+    <div class = "chatRoomWrapper">
+        <input type = "hidden" id = "userId" value = "{{ app.session.get('userSessionData')['userInfo']['userId'] }}"/>
+        <div class = "chatRoom">
+            <section class = "chat">
+                <div class = "chatOperations">
+                    <input type = "button" class = "selectedMessagesDelete" value = ""/>
+                    <input type = "button" class = "favoriteMessages" value = ""/>
+                    <input type = "text" class = "chatSearch" id = "chatSearch" placeholder = "Search message ..."/>
+                </div>
+                <div class = "chatParticipant1">
+                    {% if app.session.get('userSessionData')['userInfo']['userWebPic'] %}
+                        <img src = "{{ asset('public_files/'~app.session.get('userSessionData')['userInfo']['username']~
+                        '/albums/profile_pics/'~app.session.get('userSessionData')['userInfo']['userWebPic']) }}" class = "ava"/>
+                    {% else %}
+                        <img src = "{{ asset('public_files/default/noAvatarMale.png') }}" class = "ava"/>
+                    {% endif %}
+                    <div class = "participantInfo">
+                        {{ app.session.get ('userSessionData')['userInfo']['userFirstName'] }}<br/>
+                        {{ app.session.get ('userSessionData')['userInfo']['userLastName'] }}
+                    </div>
+                </div>
+                <div class = "chatParticipant2">
+                    {% if chatUsers[participantId].webProfilePic %}
+                        <img src = "{{ asset('public_files/'~chatUsers[participantId].login~
+                        '/albums/profile_pics/'~chatUsers[participantId].webProfilePic) }}" class = "ava"/>
+                    {% else %}
+                        <img src = "{{ asset('public_files/default/noAvatarMale.png') }}" class = "ava"/>
+                    {% endif %}
+                    <div class = "participantInfo">
+                        {{ chatUsers[participantId].firstName }}<br/>
+                        {{ chatUsers[participantId].lastName }}
+                    </div>
+                    <input type = "hidden" id = "participantId" value = "{{ participantId }}"/>
+                </div>
+                <div class = "chatMessages">
+                    {% for message in chatMessages %}
+                        {% if message.userId == participantId %}
+                            <div class = "messageParticipant2 {% if message.isReaded == 0 %}unreadMessage{% endif %}">
+                                <span class = "messageDateTime2">{{ message.dateTimeSent | date('d.m.Y H:m:s') }}</span>
+                                <span class = "messageText">{{ message.messageText }}</span>
+                                <input type = "hidden" class = "messageId" value = "{{ message.messageId }}"/>
+                                <div class = "clear"></div>
+                            </div>
+                        {% else %}
+                            <div class = "messageParticipant1 {% if message.isReaded == 0 %}unreadMessage{% endif %}">
+                                <span class = "messageDateTime1">{{ message.dateTimeSent | date('d.m.Y H:m:s') }}</span>
+                                <span class = "messageText">{{ message.messageText }}</span>
+                                <input type = "button" class = "deleteMessageIcon" value = ""/><br/>
+                                <input type = "checkbox" class = "messageSelect" id = "m{{ message.messageId }}" unchecked/>
+                                <label for = "m{{ message.messageId }}"><span></span></label>
+                                <input type = "hidden" class = "messageId" value = "{{ message.messageId }}"/>
+                                <div class = "clear"></div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class = "clear"></div>
+                </div>
+                <div class = "chatMessageInputWrapper">
+                    <textarea class = "areaText" id = "chatMessageTextarea" placeholder = "Message ... "></textarea>
+                    <input type = "button" class = "submitButton right" id = "sendChatMessage" value = "Send"/>
+                </div>
+            </section>
+            <section class = "chatRooms">
+                <ul id = "chatRooms">
+                    {% for chat in availableChats %}
+                        <a href = "chat_room?id={{ chat.chatId }}">
+                            <li {% if chat.messageIsRead == 0 %}class = "unread"{% endif %}>
+                                {% if chat['contactWebProfilePic'] %}
+                                    <img src = "{{ asset('public_files/'~chat['contactUsername'])~'/albums/profile_pics/'
+                                    ~chat['contactWebProfilePic'] }}" class = "authorPic"/>
+                                {% else %}
+                                    <img src = "{{ asset('public_files/default/noAvatarMale.png') }}" class = "authorPic"/>
+                                {% endif %}
+                                <span class = "author">{{ chat.contactName }} {{ chat.contactFamily }}</span><br/>
+                                <span class = "dateTime">{{ chat.messageSentTime }}</span><br/>
+                                <span class = "message">{{ chat.chatMessage }}</span>
+                                <input type = "hidden" class = "chatRoomId" value = "{{ chat.chatId }}"/>
+                            </li>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </section>
+            <div class = "clear"></div>
+        </div>
+    </div>
 {% endblock %}

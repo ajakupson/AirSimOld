@@ -6,39 +6,67 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Translations
+ *
+ * @ORM\Table(name="translations", uniqueConstraints={@ORM\UniqueConstraint(name="alias", columns={"alias"})})
+ * @ORM\Entity
  */
 class Translations
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="word_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $wordId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="page_id", type="integer", nullable=false)
      */
     private $pageId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="alias", type="string", length=50, nullable=false)
      */
     private $alias;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="eng", type="text", nullable=false)
      */
     private $eng;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="rus", type="text", nullable=false)
      */
     private $rus;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="est", type="text", nullable=false)
      */
     private $est;
 
-    /**
-     * @var integer
-     */
-    private $wordId;
 
+
+    /**
+     * Get wordId
+     *
+     * @return integer 
+     */
+    public function getWordId()
+    {
+        return $this->wordId;
+    }
 
     /**
      * Set pageId
@@ -153,15 +181,5 @@ class Translations
     public function getEst()
     {
         return $this->est;
-    }
-
-    /**
-     * Get wordId
-     *
-     * @return integer 
-     */
-    public function getWordId()
-    {
-        return $this->wordId;
     }
 }

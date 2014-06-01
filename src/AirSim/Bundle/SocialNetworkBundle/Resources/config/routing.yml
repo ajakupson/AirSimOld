@@ -12,6 +12,9 @@ air_sim_social_network_user:
     pattern:  /user/{username}
     defaults: { _controller: AirSimSocialNetworkBundle:User:user }
 # AJAX calls
+air_sim_social_network_user_comment_photo:
+    pattern:  /user_comment_photo
+    defaults: { _controller: AirSimSocialNetworkBundle:User:commentPhoto }
 air_sim_social_network_user_photo_info:
     pattern:  /user_get_photo_data
     defaults: { _controller: AirSimSocialNetworkBundle:User:getPhotoData }
@@ -44,6 +47,16 @@ air_sim_social_network_contacts_search_contact:
 air_sim_social_network_chat:
     pattern:  /chat/{location}
     defaults: { _controller: AirSimSocialNetworkBundle:Chat:chat }
+# AJAX calls
+air_sim_social_network_chat_send_message:
+    pattern:  /chat_send_message
+    defaults: { _controller: AirSimSocialNetworkBundle:Chat:sendMessage }
+air_sim_social_network_chat_read_message:
+    pattern:  /chat_read_message
+    defaults: { _controller: AirSimSocialNetworkBundle:Chat:readMessage }
+air_sim_social_network_chat_delete_message:
+    pattern:  /chat_delete_message
+    defaults: { _controller: AirSimSocialNetworkBundle:Chat:deleteMessage }
 
 ##### Photos #####
 air_sim_social_network_photo_albums:

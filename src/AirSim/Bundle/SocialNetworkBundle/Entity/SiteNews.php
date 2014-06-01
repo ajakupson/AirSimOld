@@ -6,44 +6,74 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SiteNews
+ *
+ * @ORM\Table(name="site_news")
+ * @ORM\Entity
  */
 class SiteNews
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="news_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $newsId;
+
+    /**
      * @var string
+     *
+     * @ORM\Column(name="lang_id", type="string", length=3, nullable=false)
      */
     private $langId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
     private $title;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="text", type="text", nullable=false)
      */
     private $text;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="pic", type="string", length=100, nullable=true)
      */
     private $pic;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="date", nullable=false)
      */
     private $dateAdded;
 
-    /**
-     * @var integer
-     */
-    private $newsId;
 
+
+    /**
+     * Get newsId
+     *
+     * @return integer 
+     */
+    public function getNewsId()
+    {
+        return $this->newsId;
+    }
 
     /**
      * Set langId
@@ -181,15 +211,5 @@ class SiteNews
     public function getDateAdded()
     {
         return $this->dateAdded;
-    }
-
-    /**
-     * Get newsId
-     *
-     * @return integer 
-     */
-    public function getNewsId()
-    {
-        return $this->newsId;
     }
 }

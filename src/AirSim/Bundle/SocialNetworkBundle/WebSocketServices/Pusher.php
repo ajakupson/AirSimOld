@@ -2,6 +2,7 @@
 namespace AirSim\Bundle\SocialNetworkBundle\WebSocketServices;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
+use AirSim\Bundle\SocialNetworkBundle\Modules\UserModule;
 
 class Pusher implements WampServerInterface
 {
@@ -30,17 +31,19 @@ class Pusher implements WampServerInterface
         $entryData = json_decode($entry, true);
         $entryData = json_decode($entryData, true);
 
-        // If the lookup topic object isn't set there is no one to publish to
-        if (!array_key_exists($entryData['page'], $this->subscribedTopics)) {
-            return;
+        // send data to all users located on this page or send notification to specific user
+        if(array_key_exists($entryData['eventData']['page'], $this->subscribedTopics))
+        {
+            $topic = $this->subscribedTopics[$entryData['eventData']['page']];
+            $topic->broadcast($entryData);
         }
+        if(array_key_exists('id'.$entryData['receiverData']['receiverId'], $this->subscribedTopics))
+        {
+            $topic = $this->subscribedTopics['id'.$entryData['receiverData']['receiverId']];
+            $topic->broadcast($entryData);
+        }
+        else return;
 
-        //echo $entryData['cat'];
-
-        $topic = $this->subscribedTopics[$entryData['page']];
-
-        // re-send the data to all the clients subscribed to that category
-        $topic->broadcast($entryData);
     }
 
     public function onUnSubscribe(ConnectionInterface $conn, $topic) {

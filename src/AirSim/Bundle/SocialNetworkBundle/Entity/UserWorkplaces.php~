@@ -6,61 +6,75 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserWorkplaces
+ *
+ * @ORM\Table(name="user_workplaces", indexes={@ORM\Index(name="FK_user_workplaces", columns={"user_id"})})
+ * @ORM\Entity
  */
 class UserWorkplaces
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="rec_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $recId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="workpalces")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
     private $userId;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="company", type="string", length=150, nullable=false)
      */
     private $company;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="position", type="string", length=150, nullable=false)
      */
     private $position;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="start_date", type="date", nullable=false)
      */
     private $startDate;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="end_date", type="date", nullable=true)
      */
     private $endDate;
 
     /**
-     * @var integer
-     */
-    private $recId;
-
-
-    /**
-     * Set userId
+     * @var \Users
      *
-     * @param integer $userId
-     * @return UserWorkplaces
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * })
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
+    private $user;
 
-        return $this;
-    }
+
 
     /**
-     * Get userId
+     * Get recId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getRecId()
     {
-        return $this->userId;
+        return $this->recId;
     }
 
     /**
@@ -156,12 +170,25 @@ class UserWorkplaces
     }
 
     /**
-     * Get recId
+     * Set user
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\Users $user
+     * @return UserWorkplaces
      */
-    public function getRecId()
+    public function setUser(\AirSim\Bundle\SocialNetworkBundle\Entity\Users $user = null)
     {
-        return $this->recId;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\Users 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

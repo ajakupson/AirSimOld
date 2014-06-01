@@ -6,71 +6,73 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserConfig
+ *
+ * @ORM\Table(name="user_config")
+ * @ORM\Entity
  */
 class UserConfig
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="config_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $userId;
+    private $configId;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="priv_phone_visibility", type="integer", nullable=false)
      */
     private $privPhoneVisibility;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="priv_search_by_phone", type="integer", nullable=false)
      */
     private $privSearchByPhone;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="priv_add_info_visibility", type="integer", nullable=false)
      */
     private $privAddInfoVisibility;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="priv_friends_visibility", type="integer", nullable=false)
      */
     private $privFriendsVisibility;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="priv_who_allowed_write", type="integer", nullable=false)
      */
     private $privWhoAllowedWrite;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="sync_auto_sync", type="integer", nullable=false)
      */
     private $syncAutoSync;
 
-    /**
-     * @var integer
-     */
-    private $reccordId;
 
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return UserConfig
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
+     * Get configId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getConfigId()
     {
-        return $this->userId;
+        return $this->configId;
     }
 
     /**
@@ -209,15 +211,5 @@ class UserConfig
     public function getSyncAutoSync()
     {
         return $this->syncAutoSync;
-    }
-
-    /**
-     * Get reccordId
-     *
-     * @return integer 
-     */
-    public function getReccordId()
-    {
-        return $this->reccordId;
     }
 }

@@ -6,66 +6,76 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserFriends
+ *
+ * @ORM\Table(name="user_friends", indexes={@ORM\Index(name="FK_user_friends", columns={"user_id"})})
+ * @ORM\Entity
  */
 class UserFriends
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="rec_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $userId;
+    private $recId;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="friend_id", type="integer", nullable=false)
      */
     private $friendId;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="date", nullable=false)
      */
     private $dateAdded;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="is_accepted", type="boolean", nullable=false)
      */
     private $isAccepted;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date_accepted", type="date", nullable=true)
      */
     private $dateAccepted;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * @var integer
-     */
-    private $recId;
-
-
-    /**
-     * Set userId
+     * @var \Users
      *
-     * @param integer $userId
-     * @return UserFriends
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * })
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
+    private $user;
 
-        return $this;
-    }
+
 
     /**
-     * Get userId
+     * Get recId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getRecId()
     {
-        return $this->userId;
+        return $this->recId;
     }
 
     /**
@@ -184,12 +194,25 @@ class UserFriends
     }
 
     /**
-     * Get recId
+     * Set user
      *
-     * @return integer 
+     * @param \AirSim\Bundle\SocialNetworkBundle\Entity\Users $user
+     * @return UserFriends
      */
-    public function getRecId()
+    public function setUser(\AirSim\Bundle\SocialNetworkBundle\Entity\Users $user = null)
     {
-        return $this->recId;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AirSim\Bundle\SocialNetworkBundle\Entity\Users 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

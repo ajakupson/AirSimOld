@@ -16,7 +16,7 @@ class PhotosModule
     public static function getLastPhotos($entityManager, $userId, $maxResult = 12)
     {
         $query = $entityManager->createQueryBuilder();
-        $query
+        /*$query
             ->select(array('lastPhotos', 'photoAlbums.albumName'))
             ->from('AirSimSocialNetworkBundle:UserPhotos', 'lastPhotos')
             ->innerJoin('AirSimSocialNetworkBundle:UserPhotoAlbums', 'photoAlbums')
@@ -24,7 +24,25 @@ class PhotosModule
             ->andWhere('photoAlbums.userId = :userId')
             ->setParameter('userId', $userId)
             ->orderBy('lastPhotos.photoId', 'DESC')
+            ->setMaxResults($maxResult);*/
+        /*$query
+            ->select(array('lastPhotos', 'photoAlbums.albumName'))
+            ->from('AirSimSocialNetworkBundle:UserPhotos', 'lastPhotos')
+            ->innerJoin('lastPhotos.photoId', 'pId')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
+            ->andWhere('user.userId = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('lastPhotos.photoId', 'DESC')
+            ->setMaxResults($maxResult);*/
+        $query
+            ->select(array('lastPhotos', 'photoAlbums.albumName'))
+            ->from('AirSimSocialNetworkBundle:UserPhotoAlbums', 'photoAlbums')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user', 'WITH', 'user.userId = :userId')
+            ->innerJoin('AirSimSocialNetworkBundle:UserPhotos', 'lastPhotos', 'WITH', 'photoAlbums.albumId = 1')
+            ->setParameter('userId', $userId)
+            ->orderBy('lastPhotos.photoId', 'DESC')
             ->setMaxResults($maxResult);
+
         $lastPhotos = $query->getQuery()->getResult();
 
         return $lastPhotos;
@@ -34,10 +52,10 @@ class PhotosModule
     {
         $query = $entityManager->createQueryBuilder();
         $query
-            ->select(array('photo', 'photoAlbums.albumName', 'photoAlbums.albumTitle'))
+            ->select(array('photo', 'photoAlbums.albumName', 'photoAlbums.albumTitle', 'user.login'))
             ->from('AirSimSocialNetworkBundle:UserPhotos', 'photo')
-            ->innerJoin('AirSimSocialNetworkBundle:UserPhotoAlbums', 'photoAlbums')
-            ->where('photo.albumId = photoAlbums.albumId')
+            ->innerJoin('AirSimSocialNetworkBundle:UserPhotoAlbums', 'photoAlbums', 'WITH', 'photo.albumId = photoAlbums.albumId')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user', 'WITH', 'photoAlbums.userId = user.userId')
             ->andWhere('photo.photoId = :photoId')
             ->setParameter('photoId', $photoId);
         $photoData = $query->getQuery()->getResult();
@@ -81,6 +99,34 @@ class PhotosModule
             $nextPhotoId = $nextPhotoId[0]['photoId'];
 
         return $nextPhotoId;
+    }
+
+    public static function getPhotoComments($entityManager, $photoId)
+    {
+        $query = $entityManager->createQueryBuilder();
+        $query
+            ->select('comment.commentId', 'comment.comment', 'comment.dateAdded', 'author.firstName',
+                'author.lastName', 'author.login', 'author.webProfilePic')
+            ->from('AirSimSocialNetworkBundle:PhotoComments', 'comment')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'author', 'WITH', 'comment.userId = author.userId')
+            ->where('comment.photoId = :photoId')
+            ->setParameter('photoId', $photoId);
+        $comments = $query->getQuery()->getResult();
+
+        return $comments;
+    }
+
+    public static function getCommentsAuthors($entityManager, $authorsIdsArray)
+    {
+        $query = $entityManager->createQueryBuilder();
+        $query
+            ->select('author')
+            ->from('AirSimSocialNetworkBundle:Users')
+            ->where('author.userId IN (:authors)')
+            ->setParameter('authors', $authorsIdsArray);
+        $authors = $query->getQuery()->getResult();
+
+        return $authors;
     }
 
     public static function getAlbumPhotos($entityManager, $albumId)

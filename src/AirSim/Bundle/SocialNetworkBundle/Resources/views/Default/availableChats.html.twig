@@ -11,15 +11,20 @@
 {% block uniqueContent %}
     <div class = "availableChatsWrapper">
         <div class = "availableChatsContent">
-            Select or create chat room
             <section class = "availableChats">
+                <input type = "button" class = "submitButton" value = "Create chat"/>
+                <input type = "button" class = "submitButton" value = "Delete chats"/>
                 <ul>
                     {% for chat in availableChats %}
                         <a href = "chat_room?id={{ chat.chatId }}">
-                            <li>
-                                <img src = "{{ asset('public_files/'~chat['messageAuthorUsername'])~'/albums/profile_pics/'
-                                ~chat['messageAuthorWebProfilePic'] }}" class = "authorPic"/>
-                                <span class = "author">{{ chat.messageAuthorName }} {{ chat.messageAuthorFamily }}</span><br/>
+                            <li {% if chat.messageIsRead == 0 %}class = "unread"{% endif %}>
+                                {% if chat['contactWebProfilePic'] %}
+                                    <img src = "{{ asset('public_files/'~chat['contactUsername'])~'/albums/profile_pics/'
+                                    ~chat['contactWebProfilePic'] }}" class = "authorPic"/>
+                                {% else %}
+                                    <img src = "{{ asset('public_files/default/noAvatarMale.png') }}" class = "authorPic"/>
+                                {% endif %}
+                                <span class = "author">{{ chat.contactName }} {{ chat.contactFamily }}</span><br/>
                                 <span class = "dateTime">{{ chat.messageSentTime }}</span><br/>
                                 <span class = "message">{{ chat.chatMessage }}</span>
                             </li>
