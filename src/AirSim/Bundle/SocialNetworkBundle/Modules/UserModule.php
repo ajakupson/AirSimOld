@@ -44,51 +44,20 @@ class UserModule
         return $username;
     }
 
-
-    public static function getUserHighEducation($entityManager, $username)
+    public static function getUserLastAddedContacts($entityManager, $userEntity)
     {
         $query = $entityManager->createQueryBuilder();
-        /*$query
-            ->select('userHighEducation')
-            ->from('AirSimSocialNetworkBundle:UserHighEducation', 'userHighEducation')
-            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
-            ->where('userHighEducation.userId = user.userId')
-            ->andWhere('user.login = :login')
-            ->setParameter('login', $username)
-            ->orderBy('userHighEducation.startDate', 'ASC');*/
         $query
-            ->select('userHighEducation')
-            ->from('AirSimSocialNetworkBundle:Users', 'user')
-            ->innerJoin('AirSimSocialNetworkBundle:UserHighEducation', 'userHighEducation')
-            ->andWhere('user.userId = :login')
-            ->setParameter('login', $username)
-            ->orderBy('userHighEducation.startDate', 'ASC');
-        $userHighEducation = $query->getQuery()->getResult();
-
-        return $userHighEducation;
-    }
-
-    public static function getUserWorkplaces($entityManager, $username)
-    {
-        $query = $entityManager->createQueryBuilder();
-        /*$query
-            ->select('userWorkplaces')
-            ->from('AirSimSocialNetworkBundle:UserWorkplaces', 'userWorkplaces')
-            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
-            ->where('userWorkplaces.userId = user.userId')
-            ->andWhere('user.login = :login')
-            ->setParameter('login', $username)
-            ->orderBy('userWorkplaces.startDate', 'ASC');*/
-        $query
-            ->select('userWorkplaces')
-            ->from('AirSimSocialNetworkBundle:UserWorkplaces', 'userWorkplaces')
-            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user')
-            ->andWhere('user.login = :login')
-            ->setParameter('login', $username)
-            ->orderBy('userWorkplaces.startDate', 'ASC');
-        $userWorkplaces = $query->getQuery()->getResult();
-
-        return $userWorkplaces;
+            ->select('userFriends')
+            ->from('AirSimSocialNetworkBundle:UserFriends', 'userFriends')
+            ->innerJoin('AirSimSocialNetworkBundle:Users', 'user', 'WITH', 'userFriends.user = :userEntity')
+            ->where('userFriends.isAccepted = 1')
+            ->andWhere('user.userId = :userId')
+            ->setParameter('userEntity', $userEntity)
+            ->setParameter('userId', $userEntity->getUserId())
+            ->setMaxResults(7)
+            ->orderBy('userFriends.dateAccepted', 'DESC');
+        $userFriends = $query->getQuery()->getResult();
     }
 
     public static function getUserFriends($entityManager, $username, $limit = 0, $offset = 0, $sortBy = 'userId', $sortType = 'ASC')

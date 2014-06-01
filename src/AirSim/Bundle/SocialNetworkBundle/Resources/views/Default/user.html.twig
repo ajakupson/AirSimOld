@@ -69,10 +69,10 @@
                         <div class = "infoLine">
                             <div class = "title">Birthdate:</div><span class = "data">{{ userData.birthdate | date('d.m.Y') }}</span>
                         </div>
-                        {% if userHighEducation %}
+                        {% if userData.getHighEducation() %}
                             <div class = "infoBlock">
                                 <div class = "title">High education:</div>
-                                {% for highEducation in userHighEducation %}
+                                {% for highEducation in userData.getHighEducation() %}
                                     <div class = "infoLine">
                                         <div class = "title underlined clear">Degree:</div>
                                     </div>
@@ -91,10 +91,10 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        {% if userWorkplaces %}
+                        {% if userData.getWorkplaces() %}
                             <div class = "infoBlock">
                                 <div class = "title">Career:</div>
-                                {% for userWorkplace in userWorkplaces %}
+                                {% for userWorkplace in userData.getWorkplaces() %}
                                     <div class = "infoLine">
                                         <div class = "title underlined clear">Workplace:</div>
                                     </div>

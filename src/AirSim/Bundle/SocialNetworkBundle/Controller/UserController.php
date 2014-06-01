@@ -64,19 +64,16 @@ class UserController extends Controller
         $pages[] = 1;
         $translations = $this->get('TranslationModule')->getPageTranslations($this->entityManager, $pages, $selectedLang);
 
-        //$userId = $this->session->get('userSessionData')['userInfo']['userId'];
         /* User Info Block */
         $userData =  UserModule::getUserData($this->entityManager, $username);
-        //$userHighEducation = UserModule::getUserHighEducation($this->entityManager, $username);
-        //$userWorkplaces = UserModule::getUserWorkplaces($this->entityManager, $username);
-        $userHighEducation = $userData->getHighEducation();
-        $userWorkplaces = $userData->getWorkplaces();
+        $userId = $userData->getUserId();
 
         /* Contacts Blocks */
         //$userLastContacts = UserModule::getUserFriends($this->entityManager, $username, 7, 0, 'dateAdded', 'DESC');
         //$contacts = UserModule::getUserFriends($this->entityManager, $username, 9);
        // $userLastContacts = $userData->getFriends();
         //$contacts = $userData->getFriends();
+        $userLastContacts = UserModule::getUserLastAddedContacts($this->entityManager, $userData);
 
         /* Last Photos Block */
         //$userLastPhotos = $userData->getPhotoAlbums()->getAlbumPhotos();
@@ -87,8 +84,8 @@ class UserController extends Controller
         //$userWallRecords = UserWallModule::getUserWallRecords($this->entityManager, $userData[0], $whoId);
 
         return $this->render('AirSimSocialNetworkBundle:Default:user.html.twig',
-            array('translations' => $translations, 'userData' => $userData, 'userHighEducation' => $userHighEducation, 'userWorkplaces' => $userWorkplaces,
-                'userLastContacts' => '', 'userLastPhotos' => '', 'contacts' => '',
+            array('translations' => $translations, 'userData' => $userData,
+                'userLastContacts' => $userLastContacts, 'userLastPhotos' => '', 'contacts' => '',
                 'userWallRecords' => ''/*$userWallRecords*/));
 
         /*return $this->render('AirSimSocialNetworkBundle:Default:user.html.twig',
